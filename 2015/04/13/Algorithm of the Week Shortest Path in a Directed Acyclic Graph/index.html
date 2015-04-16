@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="博客,文章," />
+  <meta name="keywords" content="算法,翻译," />
 
 
 
@@ -130,8 +130,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/04/13/hello-world/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/hello-world/"></span>
+            <a href="/2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/"></span>
             </a>
           </span>
           
@@ -145,11 +145,35 @@
       
 
       
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>!</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+        <p></p><h2>介绍</h2><br>我们已经知道了如何通过Dijkstra算法在非负权图中找到最短路径。即使图中有负权边，我们也知道通过Bellman-Ford算法找到一个从给定的源点到其它所有节点的最短路径。现在我们将看到一个在线性时间内运行得更快的算法，它可以在有向无环图中找到从一个给定的源点到其它所有可达顶点的最短路径，又名有向无环图（DAG）。<p></p>
 <a id="more"></a>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<p><span id="container_page_counter"><br>  本文总阅读量<span id="value_page_counter"></span>次<br></span></p>
+<p>由于有向无环图无环所以我们不必担心负环的问题。正如我们已经知道在负环里讨论最短路径是毫无意义的一样，因为我们可以在这些环里不断“循环”，但实际上我们得到的路径将变得越来越短（构成负的环路，存在死循环）。</p>
+<p><a href="http://www.importnew.com/9690.html/1-negative-cycles" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9693" title="1.-Negative-Cycles" src="http://www.importnew.com/wp-content/uploads/2014/02/85e85de99a1d4b8296c3d498dc018549-300x193.png" alt="" width="300" height="193"></a></p>
+<p>负环的存在使我们试图找到最短路径的行为变得毫无意义！</p>
+<p>因此，我们要解决Dijkstra算法和的Bellman-Ford算法中的两个问题。首先，我们只需要非负的权重，其次，图中不能有环。好了，这样我们就可以通过这个算法处理满足这两种情况的例子了。</p>
+<p></p><h2>概述</h2><br>关于有向无环图（DAGs）我们首先要知道，它们可以很容易地进行拓扑排序。拓扑排序应用范围非常之广，其中最常用的或许就是用于安排依赖任务（依赖任务是同属于一个工作中相同任务的实体，这些实体是保证互连的，它们解决共同的问题）。<p></p>
+<p><a href="http://www.importnew.com/9690.html/2-topological-sort" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9694" title="2.-Topological-Sort" src="http://www.importnew.com/wp-content/uploads/2014/02/3ef7747e7f16098283037cfca7281fcc-300x193.png" alt="" width="300" height="193"></a></p>
+<p>拓扑排序通常是用来“排序”依赖任务的！</p>
+<p>经过拓扑排序，我们最终会得到一张DAG图的顶点列表，我们确信在拓扑排序列表中如果存在一条边（u，v），那么顶点u会先于顶点v进入列表中。</p>
+<p><a href="http://www.importnew.com/9690.html/3-topological-sort-part-2" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9695" title="3.-Topological-Sort-part-2" src="http://www.importnew.com/wp-content/uploads/2014/02/803b268420de1c495f6f7418967d7081-300x193.png" alt="" width="300" height="193"></a></p>
+<p>如果有一条边（u，v），那么顶点u一定在顶点v前面。这个结果通过这张图片变得更加通俗易懂。其中B和D之间没有边，但在列表中B在D前面！</p>
+<p>此信息异常重要，我们唯一需要做的事情就是通过这个排序列表来计算距离最短的路径，这和Dijkstra算法比较相似。</p>
+<p>好了，让我们来总结一下这个算法：</p>
+<p>-首先，我们必须对有向无环图进行拓扑排序;</p>
+<p>-其次，我们将到源点的距离初始化为0并将到其它所有顶点的距离设置为无穷大;</p>
+<p>-最后，对于列表中的每一个顶点，我们从它的所有邻节点中找到最短路径的那个顶点;</p>
+<p>这很像Dijkstra算法，但是其主要区别是我们使用了一个优先级队列，并且此次我们使用的是经过拓扑排序的列表。</p>
+<p></p><h2>代码</h2><br>此次的代码实际上是一段伪代码。虽然目前为止所有的例子都是用PHP编写，但是伪代码更易于理解，也不会将你与某一特定的语言实现绑定在一起。此外，如果你对给定的语言感到难以理解，那么对你而言读懂代码比阅读伪代码更加困难。<p></p>
+<pre class="brush: php; gutter: true; first-line: 1; highlight: []; html-script: false">Topologically sort G into L;
+Set the distance to the source to 0;
+Set the distances to all other vertices to infinity;
+For each vertex u in L
+   - Walk through all neighbors v of u;
+   - If dist(v) &gt; dist(u) + w(u, v) 
+      - Set dist(v) &lt;- dist(u) + w(u, v);</pre>
+
+<p></p><h2>应用</h2><br>我们必须使用这种算法的原因显而易见。唯一值得注意的问题是我们必须确保这个图没有环。但是，如果我们知道如何建立图，那么我们或多或少会有一些附加信息来确认这个图中是否有环 - 那么此时这个线性时间内的算法就会非常适用。<p></p>
+<p>原文链接：<a target="_blank" href="http://architects.dzone.com/articles/algorithm-week-shorted-path" class="external" rel="nofollow">dzone</a>   翻译：<a href="http://www.importnew.com" target="_blank" rel="external"> ImportNew.com </a> - <a href="http://www.importnew.com/author/gray" target="_blank" rel="external">郭楚沅</a><br>译文链接：<a href="http://www.importnew.com/9690.html" target="_blank" rel="external">http://www.importnew.com/9690.html</a><br>[ <span style="color:#ff0000"><b>转载请保留原文出处、译者和译文链接。</b></span>]<br><br></p>
 
       
     </div>
@@ -158,9 +182,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/博客/"> #博客 </a>
+            <a href="/tags/算法/"> #算法 </a>
           
-            <a href="/tags/文章/"> #文章 </a>
+            <a href="/tags/翻译/"> #翻译 </a>
           
         </div>
       
@@ -177,8 +201,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/04/13/hello-world/"
-               data-title="Hello World" data-url="http://www.gcrimson.com/2015/04/13/hello-world/">
+          <div class="ds-thread" data-thread-key="2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/"
+               data-title="Hello World" data-url="http://www.gcrimson.com/2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/">
           </div>
         
       </div>
@@ -236,7 +260,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -266,7 +290,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick_Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create_a_new_post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
