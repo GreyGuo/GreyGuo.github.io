@@ -1,0 +1,1203 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.2"/>
+
+
+    <meta name="description" content="郭楚沅的BLOG" />
+
+
+
+  <meta name="keywords" content="JAVA,JVM,指南," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?your-analytics-id";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <title> JVM最简生存指南 // 郭楚沅的BLOG </title>
+</head>
+
+<body>
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">郭楚沅的BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+  </ul>
+
+  <li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+  function c() {
+    var e = document.createElement("link");
+    e.setAttribute("type", "text/css");
+    e.setAttribute("rel", "stylesheet");
+    e.setAttribute("href", f);
+    e.setAttribute("class", l);
+    document.body.appendChild(e)
+  }
+ 
+  function h() {
+    var e = document.getElementsByClassName(l);
+    for (var t = 0; t < e.length; t++) {
+      document.body.removeChild(e[t])
+    }
+  }
+ 
+  function p() {
+    var e = document.createElement("div");
+    e.setAttribute("class", a);
+    document.body.appendChild(e);
+    setTimeout(function() {
+      document.body.removeChild(e)
+    }, 100)
+  }
+ 
+  function d(e) {
+    return {
+      height : e.offsetHeight,
+      width : e.offsetWidth
+    }
+  }
+ 
+  function v(i) {
+    var s = d(i);
+    return s.height > e && s.height < n && s.width > t && s.width < r
+  }
+ 
+  function m(e) {
+    var t = e;
+    var n = 0;
+    while (!!t) {
+      n += t.offsetTop;
+      t = t.offsetParent
+    }
+    return n
+  }
+ 
+  function g() {
+    var e = document.documentElement;
+    if (!!window.innerWidth) {
+      return window.innerHeight
+    } else if (e && !isNaN(e.clientHeight)) {
+      return e.clientHeight
+    }
+    return 0
+  }
+ 
+  function y() {
+    if (window.pageYOffset) {
+      return window.pageYOffset
+    }
+    return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+  }
+ 
+  function E(e) {
+    var t = m(e);
+    return t >= w && t <= b + w
+  }
+ 
+  function S() {
+    var e = document.createElement("audio");
+    e.setAttribute("class", l);
+    e.src = i;
+    e.loop = false;
+    e.addEventListener("canplay", function() {
+      setTimeout(function() {
+        x(k)
+      }, 500);
+      setTimeout(function() {
+        N();
+        p();
+        for (var e = 0; e < O.length; e++) {
+          T(O[e])
+        }
+      }, 15500)
+    }, true);
+    e.addEventListener("ended", function() {
+      N();
+      h()
+    }, true);
+    e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+    document.body.appendChild(e);
+    e.play()
+  }
+ 
+  function x(e) {
+    e.className += " " + s + " " + o
+  }
+ 
+  function T(e) {
+    e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+  }
+ 
+  function N() {
+    var e = document.getElementsByClassName(s);
+    var t = new RegExp("\\b" + s + "\\b");
+    for (var n = 0; n < e.length; ) {
+      e[n].className = e[n].className.replace(t, "")
+    }
+  }
+ 
+  var e = 30;
+  var t = 30;
+  var n = 350;
+  var r = 350;
+  var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+  var s = "mw-harlem_shake_me";
+  var o = "im_first";
+  var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+  var a = "mw-strobe_light";
+  var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+  var l = "mw_added_css";
+  var b = g();
+  var w = y();
+  var C = document.getElementsByTagName("*");
+  var k = null;
+  for (var L = 0; L < C.length; L++) {
+    var A = C[L];
+    if (v(A)) {
+      if (E(A)) {
+        k = A;
+        break
+      }
+    }
+  }
+  if (A === null) {
+    console.warn("Could not find a node of the right size. Please try a different page.");
+    return
+  }
+  c();
+  S();
+  var O = [];
+  for (var L = 0; L < C.length; L++) {
+    var A = C[L];
+    if (v(A)) {
+      O.push(A)
+    }
+  }
+})()    '>越摇越烈</a> </li>
+
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              JVM最简生存指南
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2014-10-08
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/JAVA/">JAVA</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2014/10/08/JVM最简生存指南/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/10/08/JVM最简生存指南/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p></p><h1><strong style="font-size: 13px;">最近更新 : </strong><span style="font-size: 13px;">2014年1月9日</span></h1><p></p>
+<p><div class="entry-content"></div></p>
+<p><ul id="markdown-toc"><br>    <li><a href="#why-this-guide">为什么要写这个指南</a></li></ul></p>
+<p><ul><br>    <li><a href="#work-in-progress">持续更新</a></li><br>    <li><a href="#target-audience">目标人群</a></li><br></ul><br><a id="more"></a><br><br>    <li><a href="#the-basics">基础</a></li></p>
+<p><ul><br>    <li><a href="#java-the-language-java-the-ecosystem-java-the-jvm">Java语言，Java环境，Java虚拟机</a></li><br>    <li><a href="#a-multi-language-platform">多语言平台</a></li><br>    <li><a href="#jvm-bytecode">JVM字节码</a></li><br>    <li><a href="#cross-platform">跨平台</a></li><br></ul><br><br>    <li><a href="#jvm-implementations-editions-and-versions">JVM部署和版本</a></li></p>
+<p><ul><br>    <li><a href="#editions-and-versions">版本</a></li></ul></p>
+<p><ul><br>    <li><a href="#editions">版本类型</a></li><br>    <li><a href="#versions">升级版本</a></li><br></ul><br><br><br><br>    <li><a href="#installing-java">Java的安装</a></li><br>    <li><a href="#application-output-aka-artifacts">应用程序输出又叫Artifacts</a></li></p>
+<p><ul><br>    <li><a href="#jar-files">JAR文件</a></li><br>    <li><a href="#war-files">WAR文件</a></li><br></ul><br><br>    <li><a href="#running-java-applications">运行Java应用</a></li></p>
+<p><ul><br>    <li><a href="#classpath">Classpath</a></li><br></ul><br><br>    <li><a href="#build-tools">构建工具</a></li></p>
+<p><ul><br>    <li><a href="#ant">Ant</a></li><br>    <li><a href="#maven">Maven</a></li><br>    <li><a href="#gradle">Gradle</a></li><br>    <li><a href="#intellij-idea-build">IntelliJ IDEA的构建</a></li><br></ul><br><br>    <li><a href="#frameworks-and-libraries">框架和库</a></li></p>
+<p><ul><br>    <li><a href="#json-serialization">JSON序列化</a></li><br>    <li><a href="#unit-testing">单元测试</a></li><br>    <li><a href="#mocking-frameworks">模拟框架</a></li><br>    <li><a href="#logging">日志</a></li><br>    <li><a href="#ioc-containers">IoC容器</a></li><br>    <li><a href="#http-clients">HTTP客户端</a></li><br>    <li><a href="#web-frameworks">Web框架</a></li><br>    <li><a href="#networking">网络</a></li><br>    <li><a href="#other-libraries-and-utilities">其它库和工具</a></li><br></ul><br><br>    <li><a href="#conventions">约定</a></li></p>
+<p><ul><br>    <li><a href="#namespaces">命名空间</a></li><br>    <li><a href="#property-and-method-names">属性和方法</a></li><br></ul><br><br>    <li><a href="#tooling">工具</a></li></p>
+<p><ul><br>    <li><a href="#ides">关于IDE</a></li><br>    <li><a href="#continuous-integration">持续集成</a></li><br>    <li><a href="#random-tools">随机工具</a></li><br></ul><br><br>    <li><a href="#intellij-idea-for-the-visual-studio-user">IntelliJ IDEA对于Visual Studio用户的意义</a></li><br>    <li><a href="#working-with-the-jvm">使用JVM工作</a></li></p>
+<p><ul><br>    <li><a href="#class-loaders">类加载器</a></li></ul></p>
+<p><ul><br>    <li><a href="#creating-your-own-class-loaders">创建你自己的类加载器</a></li><br>    <li><a href="#more-information-on-class-loaders">类加载器的更多信息</a></li><br>    <li><a href="#dynamic-class-loading-from-current-module">从当前动态类加载模块</a></li><br>    <li><a href="#dynamic-class-loading-from-another-module">从另一个动态类加载模块</a></li><br></ul><br><br><br><br>    <li><a href="#conferences">会议</a></li><br>    <li><a href="#changelog">变更日志</a></li><br></p>
+<p></p><h2 id="why-this-guide">为什么要写这个指南</h2><br>当你开始接触一个新的平台时，都会从做同一件事开始，通常你会根据你已学的概念或者框架来尝试快速搭建它，但是你无从下手，因为它们通常以全新的名字和方法展现在你面前。<br>走完这个过程非常耗时，有时甚至让人一筹莫展。这篇指南正是用来帮助那些新手避免此类问题的。<p></p>
+<p>这篇指南我也可以受益, 因为我确定我已经有了错误并且会发现更多的错误,所以你发现任何错误请及时反馈给我。 最好的方式是给我发送<a href="http://github.com/hhariri/hhariri.github.io" target="_blank" rel="external">pull request</a>。</p>
+<p></p><h3 id="work-in-progress">持续更新</h3><br>虽然这只是一篇博客, 但是当我碰到新东西的时候我也会即时更新这个页面。文章最顶部有最新的更新日期.<p></p>
+<p></p><h3 id="target-audience">目标人群</h3><br>这篇指南主要是针对.NET开发者，因为在这里你会发现诸多可以拿来和.NET进行比较的地方。其实从本文的URL你就可以看出些端倪了。话虽如此，我同样也希望这些能对那些初次接触Java平台的非.NET发开者有所帮助。<p></p>
+<p></p><h2 id="the-basics">基础</h2><p></p>
+<p></p><h3 id="java-the-language-java-the-ecosystem-java-the-jvm">Java语言，Java环境，Java虚拟机</h3><br>这三者全完不是一回事。一个是编程语言(想想C#)，一个是编程环境(想想.NET开发环境), 另一个则是开发平台(想想CLR)。<br>不幸的是似乎Java通常被用来指代以上所有。<br>不要一条路走到黑。虽然我不喜欢Java这样的语言但是整个Java的生态系统却充满了活力同时有许多创新不断发生。作为一名.NET开发者，你应该对NHibernate，NUnit，NLog，NAnt等等非常了解，其实 所有这些都来自于Java的生态系统（把N去掉就是了）。<p></p>
+<p></p><h3 id="a-multi-language-platform">多语言平台</h3><br>把JVM想象是CLR。它们是对多语言编程提供跨平台的虚拟机。虽然它们都支持多语言，但是它们之间还是有差别的。<br>在CLR上，我们主要使用C#，VB.NET(“濒危物种”)和F#,在JVM上就是Java，Scala，Clojure， Ceylon，Groovy，JRuby和Kotlin，这里只是<a href="http://en.wikipedia.org/wiki/List_of_JVM_languages" target="_blank" rel="external">举几个例子</a>。<p></p>
+<p></p><h3 id="jvm-bytecode">JVM字节码</h3><br>JVM字节码是基于JVM的语言的编译从而在JVM上运行。这和.NET上的IL相似。<p></p>
+<p></p><h3 id="cross-platform">跨平台</h3><br>JVM是100%跨平台的。除了Windows，OSX和Linux，它也可以在许多其它设备上运行。<p></p>
+<p></p><h2 id="jvm-implementations-editions-and-versions">JVM部署，版本类型和升级版本</h2><br>JVM有<a href="http://en.wikipedia.org/wiki/List_of_Java_virtual_machines" target="_blank" rel="external">多种实现</a>。最常见的就是在Oracle和OpenJDK中的实现。甚至<a href="http://en.wikipedia.org/wiki/IKVM.NET" target="_blank" rel="external">有一种.NET实现叫做IKVM.NET</a>。<p></p>
+<p></p><h3 id="editions-and-versions">版本类型和升级版本</h3><br>这可能是目前为止在本指南中最复杂的部分。你根本无法想象连像命名或者版本控制这样简单的事情都能搞砸。这种命名方式甚至使微软的产品都显得合理不少。<p></p>
+<p>让我们开始吧：</p>
+<p></p><h4 id="editions">版本类型</h4><p></p>
+<p><ul><br>    <li><strong>JRE - Java运行环境</strong>。这是用来运行Java应用程序的。但你不能仅仅依靠它来开发运行在JVM上的应用程序。</li><br>    <li><strong>Java SE (JDK) - Java标准版</strong>。它也称为JDK。这是在JVM上开发应用程序最起码的条件。</li><br>    <li><strong>Java EE - Java企业版</strong>。好了，看名字你就懂了。通过它,你可以获得所有有关企业级分布式的东西大规模应用。明确一点的是它包含了Java SE。</li><br>    <li><strong>Java ME - Java移动版</strong>。这是针对移动电话和便携设备的，它很像.NET微框架。</li><br>    <li><strong>JavaFX</strong> - 代替了Swing，它是Java的主要GUI开发包。同时它(尽管有些争议的话题)也面向RIA的开发。（难道是HTML/JS/CSS不够好吗？)。</li><br></ul><br>可以推断，所有形如Java XY的版本都可以写成JDK的形式。</p>
+<p>这里你可以找到更多相关的<a href="http://www.oracle.com/technetwork/java/javase/namechange-140185.html" target="_blank" rel="external">历史</a>和<a href="http://www.oracle.com/technetwork/java/javase/jdk7-naming-418744.html" target="_blank" rel="external">命名</a>。</p>
+<p></p><h4 id="versions">升级版本</h4><br>当前的Java版本是7，Java 8 将于2014年发布。（译者注：Java 8将于<a href="https://blogs.oracle.com/java/entry/java_se_8_schedule" target="_blank" rel="external">2014年3月18日</a>正式发布）<p></p>
+<p>查询你所安装的Java版本和类型</p>
+<p><pre class="brush: java; gutter: true">java -version</pre><br>你将会得到如下信息：</p>
+<p><pre class="brush: text; gutter: true">java version &quot;1.7.0_40&quot;<br>Java(TM) SE Runtime Environment (build 1.7.0_40-b43)<br>Java HotSpot(TM) 64-Bit Server VM (build 24.0-b56, mixed mode)</pre><br>这就是Java 7。为什么这么称呼？非常简单,将1.7.0_40中的1去掉就是7.0_40。其中0_40表示的是更新包。这是Java 7的所有版本<a href="http://www.java.com/en/download/faq/release_dates.xml" target="_blank" rel="external">发布</a>。</p>
+<p>以此类推1.5是Java 5，1.6是Java 6，1.7就是Java 7，所以你猜测一下就知道，Java 8将会是 1.8。</p>
+<p>是的，反正我是知道的。</p>
+<p></p><h2 id="installing-java">安装Java</h2><br>一旦你找到了你想要学习的<a href="#editions-and-versions">版本</a>，你可以去Oracle的<a href="http://www.java.com/en/download/help/index_installing.xml" target="_blank" rel="external">安装指南页面</a>进行下载安装。<p></p>
+<p>如果你想要知道为什么你需要安装Ask Toolbar，不要怪Oracle。显然这是在它和Sun之前达成的协议。我听说一旦期满他们就不会继续履行协议。</p>
+<p></p><h2 id="application-output-aka-artifacts">应用程序输出又叫Artifacts</h2><br>无论在.NET上还是在本地应用程序上，编译通常以得到一个可执行文件或者一些动态链接库文件来标志着结束。 而通过Java，你将在输出文件夹中得到若干<em>.class</em>文件。<p></p>
+<p>通常每个类对应一个Java类（当编译Java语言或者其它语言时按照约定转化为字节码）。</p>
+<p>这些类是JVM字节码，这非常类似于CLR中的IL。</p>
+<p></p><h3 id="jar-files">JAR文件</h3><br>类文件不会万年不变，你完全可以创建一个JAR文件，只不过就是一个<em>.class</em>文件的压缩包而已。你可以通过你最喜欢的工具来创建JAR文件，或者更简单的方式就是运行<p></p>
+<p><pre class="brush: java; gutter: true">jar cf jar-file input-file(s)</pre><br>jar工具附带在JDK中(/bin文件夹下)。</p>
+<p></p><h3 id="war-files">WAR文件</h3><br>WAR文件就是一个<a href="http://en.wikipedia.org/wiki/WAR_file_format_(Sun)" target="_blank" rel="external">由Sun公司创造的</a>面向网络应用的JAR文件。它包含了许多类文件和一些附加的元数据以及描述网络服务器（如TomCat）的文件夹。<p></p>
+<p></p><h2 id="running-java-applications">运行Java应用程序</h2><br>任何Java程序只能有一个主类在命令提示符中运行。例如：<p></p>
+<p><pre class="brush: java; gutter: true">java &lt;class_containing_main_method&gt;</pre><br>你必须在拥有<em>.class</em>的文件夹下运行这段代码。</p>
+<p></p><h3 id="classpath">Classpath</h3><br>在运行应用程序时,JVM在当前文件夹下寻找所有必要的依赖文件,然后再查找CLASSPATH环境变量所指向的一个或多个文件夹下的<em>.class</em>文件或者JAR文件和ZIP文件。<p></p>
+<p>你可以设置CLASSPATH全局环境变量，当运行一个应用程序时通过使用Java命令并添加一个命令行参数:</p>
+<p><pre class="brush: java; gutter: true">java &lt;class_containing_main_method&gt; -cp &lt;class_path&gt;</pre><br>每个条目都是用分号隔开的。</p>
+<p></p><h2 id="build-tools">构建工具</h2><br>.NET中有许多构建工具包括MS Build，NAnt，Albacore，Fake等等。JVM也没示弱。虽然许多语言都有它们自己的构建工具例如Clojure中的或者Scala中的SBT，许多语言(包括前面所提到的)可以使用更加标准的构建工具。<p></p>
+<p></p><h3 id="ant">Ant</h3><br>它是XML，NAnt也基于它。这就像MS-Build，尽管它只是XML我仍要强调它。<p></p>
+<p></p><h3 id="maven">Maven</h3><br>Maven非常流行。当你发现项目中有一个pom.xml文件，那这个项目就是Maven了。<a href="http://blog.ltgt.net/maven-is-broken-by-design/" target="_blank" rel="external">Maven也会损坏</a>。Maven也是XML。<p></p>
+<p>然而，Maven不仅仅是一个构建工具。它是一个封装系统。这就像.Net中的NuGet，也像Node.js中的NPM。像nuget.org，其实也有maven.org。这类似于“如果不用nuget.org就无法运行”，这种情况在Java系统中也同样存在。</p>
+<p>NuGet，你也可以创建你自己的Maven版本库。<a href="http://www.jfrog.com/home/v_artifactory_opensource_overview" target="_blank" rel="external">Artifactory</a>就能让你这么做。</p>
+<p></p><h3 id="gradle">Gradle</h3><br>Gradle是一个更好的Maven。它基于Groovy所以你可以摆脱复杂的XML并且创建一个更好的依赖关系管理的方法。<p></p>
+<p>我正在尝试更多的使用Gradle。</p>
+<p></p><h3 id="intellij-idea-build">IntelliJ IDEA的构建</h3><br>虽然IDE更多的是属于工具部分，IntelliJ IDEA也提供了它自己的构建系统。然而你仅仅能够在合适的环境下使用它，也就是IntelliJ IDEA和TeamCity的环境。<p></p>
+<p></p><h2 id="frameworks-and-libraries">框架和库</h2><br>这里有大量的框架和库，我只会对我已经知道的或者我需要的部分进行介绍。如果你有更好的推荐，请给我发一个<a href="http://github.com/hhariri/hhariri.github.io" target="_blank" rel="external">pull request</a>。<p></p>
+<p></p><h3 id="json-serialization">JSON序列化</h3><p></p>
+<p><ul><br>    <li><a href="http://jackson.codehaus.org/" target="_blank" rel="external">Jackson</a> - 我用过它，感觉很好。</li><br></ul></p>
+<p></p><h3 id="unit-testing">单元测试</h3><br>相当多的单元测试框架：<p></p>
+<p><ul><br>    <li><a href="http://junit.org" target="_blank" rel="external">JUnit</a> - 作为事实上的标准，它相当不错，并且被众多工具支持。</li><br>    <li><a href="http://github.com/hhariri/spek" target="_blank" rel="external">Spek</a> - 放弃。这是我自己的框架，但我仍然在用，值得一提。它能更好地支持DSL，至少我这么认为。</li><br>    <li><a href="http://jbehave.org/" target="_blank" rel="external">JBehave</a> - <a href="http://twitter.com/tastapod" target="_blank" rel="external">Dan North的</a>原始JBehave框架。</li><br>    <li><a href="http://testng.org/doc/index.html" target="_blank" rel="external">TestNG</a> - JUnit的替代品。我用的不多，所以不过多评论。</li><br></ul></p>
+<p></p><h3 id="mocking-frameworks">模拟框架</h3><br>最近我也没模拟什么框架，但是我我曾经用过一个：<p></p>
+<p><ul><br>    <li><a href="https://code.google.com/p/mockito/" target="_blank" rel="external">Mockito</a></li><br></ul></p>
+<p></p><h3 id="logging">日志</h3><p></p>
+<p><ul><br>    <li><a href="http://www.slf4j.org/" target="_blank" rel="external">SLF4J</a> - 这是在JVM平台上用于记录日志最常见的方式。使用它可以让你（理论上）变更日志并且允许选择你所需要的库。</li><br></ul></p>
+<p></p><h3 id="ioc-containers">IoC容器</h3><p></p>
+<p><ul><br>    <li><a href="https://code.google.com/p/google-guice/" target="_blank" rel="external">Guice</a> - 来自Google，我用过它，相当不错。</li><br>    <li><a href="http://spring.io/" target="_blank" rel="external">Spring</a> - 来自Spring框架，我不确定你是否可以不用配置XML就使用它，因为我也没用过。</li><br></ul></p>
+<p></p><h3 id="http-clients">HTTP客户端</h3><br>我正使用标准的Apache Commons，也接受更好的选择。<p></p>
+<p><ul><br>    <li><a href="http://hc.apache.org/httpclient-3.x/" target="_blank" rel="external">Apache的HTTP客户端</a> - 我正在使用它。非常需要一个封装器(Wrapper)。</li><br></ul></p>
+<p></p><h3 id="web-frameworks">Web框架</h3><br>许多的Web框架都基于<a href="http://en.wikipedia.org/wiki/Java_Servlet" target="_blank" rel="external">Java Servlet API的通用接口</a>。这类似于<a href="http://owin.org/" target="_blank" rel="external">OWIN</a>.<p></p>
+<p>应用可以托管在<a href="https://glassfish.java.net/" target="_blank" rel="external">GlassFish</a>，<a href="http://www.eclipse.org/jetty/" target="_blank" rel="external">Jetty</a>，<a href="http://tomcat.apache.org/" target="_blank" rel="external">Apache TomCat</a>上。</p>
+<p>顺便说一下，Oracle宣布它将停止对GlassFish商业版的支持，它的主要传播者，Arun Gupta，最近离开Oracle去了RedHat。<a href="http://blog.arungupta.me/2013/12/webinar-wildfly-for-innovation-redhat-jboss-eap-for-commercial-support/" target="_blank" rel="external">现在它让WildFly来作为替代。</a></p>
+<p>对于Web开发而言，一个非常时髦而且轻量级的选择是<a href="http://vertx.io/" target="_blank" rel="external">Vert.x</a>。它基于<a href="networking">Netty</a>的基础上构建的,你甚至可以使用不同的语言，如Java, JavaScript, Ruby。</p>
+<p></p><h3 id="networking">网络</h3><p></p>
+<p><ul><br>    <li><a href="http://netty.io/" target="_blank" rel="external">Netty</a> - 高效的异步事件驱动框架来编写高性能的web应用程序。它是从通信层抽象出来的，所以你可以使用HTTP，Sockets等等。</li><br></ul></p>
+<p></p><h3 id="other-libraries-and-utilities">其它库和工具</h3><p></p>
+<p><ul><br>    <li><a href="http://www.joda.org/joda-time/" target="_blank" rel="external">JodaTime</a> - Java中时间和日期的管理比.NET还要脆弱。使用JodaTime可以有效解决这个问题。这起源于Jon Skeet的<a href="https://code.google.com/p/noda-time/" target="_blank" rel="external">NodaTime</a>。</li><br>    <li><a href="https://code.google.com/p/reflections/" target="_blank" rel="external">Reflections</a> - 使反射更加完美。</li><br>    <li><a href="http://commons.apache.org/" target="_blank" rel="external">Apache Commons</a> - 许多经常用到的小型库。</li><br></ul></p>
+<p></p><h2 id="conventions">约定</h2><br>虽然约定在很大程度上是根据你选择的编程语言来决定，但是或多或少都有一些共同的约定。<p></p>
+<p></p><h3 id="namespaces">命名空间</h3><br>命名空间是逆序的，换言之，它以顶级域名开始，然后才是公司/组织域名等。<p></p>
+<p><pre class="brush: text; gutter: true">org.hadihariri.spek.runners</pre><br>不幸的是，某些时候，它取决于每段是否成为了一个文件夹。那意味着最终你会在GitHub得到：</p>
+<p><a href="http://www.importnew.com/10127.html/jvm-guide-1" rel="external" target="_blank"><img class="alignnone size-full wp-image-10157" title="jvm-guide-1" src="http://www.importnew.com/wp-content/uploads/2014/03/77cab40ad0c4658c207c90af2d8e9cfa.png" alt="" width="550" height="44"></a></p>
+<p>&nbsp;</p>
+<p>幸运的是如果你使用了一个不错的IDE，这些都不是问题而且易于管理。</p>
+<p></p><h3 id="property-and-method-names">属性和方法名称</h3><br>如果你原来是学C#的，而现在正在使用像Java，Scala或者Kotlin，约定将以前命名的字段，属性以及方法进行颠覆。它们都以小驼峰(lowerCamelCase)的形式命名。<br>如果你开始使用Java，可以浏览<a href="http://en.wikipedia.org/wiki/Comparison_of_C_Sharp_and_Java" target="_blank" rel="external">来进行比较</a>。<p></p>
+<p></p><h2 id="tooling">工具</h2><br>当你安装JDK时你可以得到一个编译器（javac）和一个jar创建器（jar），javadoc(用于创建Java文档)以及一些有用的工具。再加上一个文本编辑器你就可以创建并运行一个应用程序了。<p></p>
+<p></p><h3 id="ides">关于IDE</h3><br>Java领域中有三个主要的IDE：<p></p>
+<p><ul><br>    <li><a href="https://netbeans.org/" target="_blank" rel="external">NetBeans</a></li><br>    <li><a href="https://netbeans.org/" target="_blank" rel="external">Eclipse</a></li><br>    <li><a href="http://www.jetbrains.com/idea" target="_blank" rel="external">IntelliJ IDEA</a></li><br></ul><br>这三个都是自由运营的。如果你想要有一些额外的框架支持，IntellIJ IDEA就有一个最终的商业运行版，换句话说，这有鲜明的企业特点。<a href="http://www.jetbrains.com/idea/features/editions_comparison_matrix.html" target="_blank" rel="external">完整比较</a></p>
+<p>虽然Eclipse可能是最常用的集成开发环境，但我还是选择用IntelliJ IDEA。如果你想用ReSharper，你一定会喜欢IntelliJ IDEA。当然，你可以说我偏袒它。</p>
+<p></p><h3 id="continuous-integration">持续集成</h3><br>在持续集成工具的方面,.NET和JVM有诸多相似之处。事实上，它们中的许多都是基于JVM的。<p></p>
+<p><ul><br>    <li><a href="http://www.jetbrains.com/teamcity" target="_blank" rel="external">TeamCity</a> - 提供一个免费版。</li><br>    <li><a href="http://jenkins-ci.org/" target="_blank" rel="external">Jenkins</a> - 是从Hudson中拆分出来的。</li><br></ul></p>
+<p></p><h3 id="random-tools">随机工具</h3><br>我会将我发现有用的工具集加入进来。<p></p>
+<p><ul><br>    <li><a href="http://zeroturnaround.com/software/jrebel/" target="_blank" rel="external">JRebel</a> - Awesome plugin to IntelliJ IDEA的一个相当棒的插件，其它IDE的代码可以支持热插拔，换句话说就是可以不经过编译就运行代码。</li><br>    <li><a href="http://www.yourkit.com/" target="_blank" rel="external">YourKit</a> - Java分析器</li><br></ul></p>
+<p></p><h2 id="intellij-idea-for-the-visual-studio-user">站在Visual Studio用户角度看IntelliJ IDEA</h2><br>这已经变为<a href="/2014/01/06/intellij-idea-minimal-survival-guide/">自己的指南</a><p></p>
+<p></p><h2 id="working-with-the-jvm">在JVM上工作</h2><br>这部分描述了JVM上的常见情况。大多数例子是基于Kotlin的但是也可以比较容易地适应其它语言。<p></p>
+<p></p><h3 id="class-loaders">类加载器</h3><br>JVM上的类加载器对于这篇指南而言过于庞大，所以我只想简单介绍一下。<p></p>
+<p>在.NET中有一个集合类去加载其它类。在JVM上拥有类加载器。它不会是单个存在，换句话说，类加载器往往多于一个。<br>用于启动你的应用程序的默认类加载器可以通过使用<em>类加载器</em>中的方法<em>getSystemClassLoader()</em>：</p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">val classLoader = ClassLoader.getSystemClassLoader()</pre><br><br>不要尝试去创建一个<em>类加载器</em>的实例，因为它是一个抽象类。有一些类加载器的实现经常使用，其中之一就是<em>URL类加载器</em>。</p>
+<p>关于类加载器一个非常重要的观点是，每个类加载器有一个指向父类加载器的属性。</p>
+<p>这是如何影响类加载器的呢？当你尝试加载一个类时，JVM首先将会尝试加载父类。如果父类不能加载这个类，那么你自己的类加载器就会进行加载。</p>
+<p>类加载器，包括<em>URL类加载器</em>允许你在创建实例时指定一个可供选择的父类。</p>
+<p>如果没有被子类没有将类加载成功，那么系统默认的类加载器会根据给定的classpath来进行加载操作。</p>
+<p>同时，JVM中的类识别与.NET中很相似，那就意味着从不同的类加载器中加载相同的类将出现不兼容的情况，即使是在相同的链中也是如此。</p>
+<p></p><h4 id="creating-your-own-class-loaders">创建你自己的类加载器</h4><br>你不仅可以从<em>ClassLoader</em>类中创建你自己的类加载器，而且你也可以改变默认的类加载器，而这些在.NET几乎不可能。<p></p>
+<p></p><h4 id="more-information-on-class-loaders">关于类加载器的更多信息</h4><br>关于类加载器的文章非常多。这里有一些我找到的：<p></p>
+<p><ul><br>    <li><a href="http://zeroturnaround.com/rebellabs/rebel-labs-tutorial-do-you-really-get-classloaders/" target="_blank" rel="external">Extensive tutorial on Class Loaders by Zeroturnaround</a></li><br>    <li><a href="http://www.javaworld.com/article/2077260/learn-java/the-basics-of-java-class-loaders.html" target="_blank" rel="external">The Basics of Java Class Loaders</a></li><br>    <li><a href="http://www.tedneward.com/writing.aspx" target="_blank" rel="external">Ted Newards’s Papers on Finding, Loading Classes and more</a></li><br>    <li><a href="http://docs.oracle.com/javase/tutorial/ext/basics/load.html" target="_blank" rel="external">Oracle’s Papers on Java Class Loading</a></li><br></ul><br>仅使用Google就够了，因为通过它可以找到成千上万关于该主题的博客，文章和论文。</p>
+<p></p><h4 id="dynamic-class-loading-from-current-module">从当前动态类加载模块</h4><br>在.NET中，想要加载从当前配置中加载一个类，你可以这样做：<p></p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">var assembly = Assembly.GetExecutingAssembly();</pre></p>
+<p>var loadedClass = assembly.GetType(&quot;Loader.Customer&quot;);<br><br>加载器是当前用户所在命名空间的集合。这些工作的生命周期和当前集合的类一致。</p>
+<p>在JVM中就是:</p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">    val classLoader = ClassLoader.getSystemClassLoader()</pre></p>
+<pre><code><span class="variable"><span class="keyword">val</span> loadedClass</span> = classLoader?.loadClass(&amp;quot;org.loader.Customer&amp;quot;)<span class="type">&lt;/pre&gt;</span>
+</code></pre><p><br><em>?</em>这是Kotlin的用法，它表示，如果类加载器不为null，就执行这个操作。它是下面写法的简化版：</p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">if (classLoader != null) {<br>        val loadedClass = classLoader.loadClass(&quot;org.loader.Customer&quot;)<br>}</pre><br></p>
+<p></p><h4 id="dynamic-class-loading-from-another-module">从另一个模块中加载类</h4><br>在.NET中，你会这么做：<p></p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">    var assembly = Assembly.LoadFrom(@&quot;C:\Folder\SampleModule.dll&quot;);</pre></p>
+<pre><code><span class="variable"><span class="keyword">var</span> loadedClass</span> = assembly.GetType(&amp;quot;SampleModule.Customer&amp;quot;);<span class="type">&lt;/pre&gt;</span>
+</code></pre><p><br>在JVM上，你通常使用<em>URL类加载器</em>，将URL序列传递进去，而不是传递文件夹。 使用URL类加载器的好处就是你可以从磁盘和网络等地方加载。</p>
+<p>如果你的类作为一个JAR打包,那么你可以这么定义JAR文件名:</p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">    val url = URL(&quot;file:///path-to-folder/sampleModule.jar&quot;)</pre></p>
+<pre><code><span class="variable"><span class="keyword">val</span> urls</span> = array(url)
+
+<span class="variable"><span class="keyword">val</span> classLoader</span> = URLClassLoader.newInstance(urls)
+
+<span class="variable"><span class="keyword">val</span> loadedClass</span> = classLoader?.loadClass(&amp;quot;org.sampleModule.Customer&amp;quot;)<span class="type">&lt;/pre&gt;</span>
+</code></pre><p><br>你完全可以使用文件而不是URL，同时指向一个文件，这更加普遍，但之后你需要将文件转为URL:</p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">    val file = File(&quot;/path-to-folder/sampleModule.jar&quot;)</pre></p>
+<pre><code>val url = file.<span class="function"><span class="title">toURI</span><span class="params">()</span></span>.<span class="function"><span class="title">toURL</span><span class="params">()</span></span>&lt;/pre&gt;
+</code></pre><p><br>如果你的类在文件夹中以单独的<em>.class</em>文件形式存在，你要指定文件夹名：</p>
+<p><div class="highlight"></div></p>
+<p><pre class="brush: java; gutter: true">    val url = URL(&quot;file:///path-to-root-folder/&quot;)</pre></p>
+<pre><code><span class="variable"><span class="keyword">val</span> urls</span> = array(url)
+
+<span class="variable"><span class="keyword">val</span> classLoader</span> = URLClassLoader.newInstance(urls)
+
+<span class="variable"><span class="keyword">val</span> loadedClass</span> = classLoader?.loadClass(&amp;quot;org.sampleModule.Customer&amp;quot;)<span class="type">&lt;/pre&gt;</span>
+</code></pre><p><br>为什么我没有初始化<em>URL类加载器，</em>而使用<em>newInstance</em>方法？显然它的好处就是如果装有Security Manager的话就能调用<em>securityManager.checkPackageAccess</em>方法。</p>
+<p><strong><em>在使用目录时以下两点对于解决你的问题非常重要：（不是JAR文件）：</em></strong></p>
+<p><ol><br>    <li>确保你传递的URL或文件的后缀正确。</li><br>    <li>确保你在根文件夹下，那意味着什么呢？当你编译org.sampleModule.Customer这个类时，它产生了一个输出：output-root-folder/org/sampleModule/Customer.class</li><br></ol><br>“.”替换成了“/”。这意味着<em>URL加载器</em>期望你指向根文件夹，而不是命名空间开始的地方。<em>loadClass</em>方法<em>才需要提供</em>完整的命名空间。</p>
+<p>感谢<a href="http://twitter.com/orangy" target="_blank" rel="external">@orangy</a>帮助我解决这个麻烦。</p>
+<p></p><h2 id="conferences">会议</h2><br>近年来即使我不进行更多的Java开发，但是我一直在参加有关Java的会议。 这里有一些我参加会议后认为比较不错的建议和感受：<p></p>
+<p><ul><br>    <li><a href="http://www.devoxx.com/" target="_blank" rel="external">Devoxx</a> - 最大的版本在安特卫普，但现在在法国和英国。</li><br>    <li><a href="http://jaxconf.com/" target="_blank" rel="external">JAX</a> - 德国的一个长期大型会议。一群水平相当的人的会议!</li><br>    <li><a href="http://javazone.com" target="_blank" rel="external">JavaZone</a> - 这像是没有Java的开发者会。但是主要集中在挪威。</li><br>    <li><a href="http://www.oracle.com/javaone/index.html" target="_blank" rel="external">JavaOne</a> - 颇具规模。它是Java领域的技术大会。</li><br></ul><br>这里也有许多关于“跨平台”的会议<a href="http://ndcoslo.com" target="_blank" rel="external">NDC</a>，<a href="http://qconlondon.com" target="_blank" rel="external">QCon</a>，<a href="http://yowconference.com.au" target="_blank" rel="external">YOW!</a>，<a href="http://gotocon.com" target="_blank" rel="external">GOTO</a>，等等。</p>
+<p></p><h2 id="changelog">变更日志</h2><br>指南变更记录。<p></p>
+<p><table></table></p>
+<p><thead></thead></p>
+<p><tr></tr></p>
+<p><th>日期</th></p>
+<p><th>变更</th><br><br></p>
+<p><tbody></tbody></p>
+<p><tr></tr></p>
+<p><td>2013年12月30日</td></p>
+<p><td>更新了JavaFX描述。追加“更改日志”部分</td><br></p>
+<p><tr></tr></p>
+<p><td>2014年01月06日</td></p>
+<p><td>更新了标题并且固定添加了IntelliJ IDEA指南的链接</td><br></p>
+<p><tr></tr></p>
+<p><td>2014年01月09日</td></p>
+<p><td>追加了类加载部分</td><br><br><br><br><br>&nbsp;</p>
+<p>原文链接： <a target="_blank" href="http://hadihariri.com/2013/12/29/jvm-minimal-survival-guide-for-the-dotnet-developer/" class="external" rel="nofollow">hadihariri</a>    翻译： <a href="http://www.importnew.com" target="_blank" rel="external"> ImportNew.com </a> - <a href="http://www.importnew.com/author/gray" target="_blank" rel="external">郭楚沅</a><br>译文链接： <a href="http://www.importnew.com/10127.html" target="_blank" rel="external">http://www.importnew.com/10127.html</a><br>[ <span style="color:#ff0000"><b>转载请保留原文出处、译者和译文链接。</b></span>]<br><br></p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JAVA/"> #JAVA </a>
+          
+            <a href="/tags/JVM/"> #JVM </a>
+          
+            <a href="/tags/指南/"> #指南 </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/10/Your Path to a $16B exit Build a J2ME App/">160亿美元的收购，你怎么看？ 从开发一个J2ME应用说起</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2014/10/08/JVM最简生存指南/"
+               data-title="JVM最简生存指南" data-url="http://www.gcrimson.com/2014/10/08/JVM最简生存指南/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://ww3.sinaimg.cn/small/9eaa5fcdjw8er7mm0e8xmj20rd18gk8m.jpg" alt="Crimson" />
+          <p class="site-author-name">Crimson</p>
+        </div>
+        <p class="site-description motion-element">郭楚沅的BLOG</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/2661965773" target="_blank">Weibo</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">最近更新 : 2014年1月9日</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#why-this-guide"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要写这个指南</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#work-in-progress"><span class="nav-number">1.1.1.</span> <span class="nav-text">持续更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#target-audience"><span class="nav-number">1.1.2.</span> <span class="nav-text">目标人群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-basics"><span class="nav-number">1.2.</span> <span class="nav-text">基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-the-language-java-the-ecosystem-java-the-jvm"><span class="nav-number">1.2.1.</span> <span class="nav-text">Java语言，Java环境，Java虚拟机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-multi-language-platform"><span class="nav-number">1.2.2.</span> <span class="nav-text">多语言平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jvm-bytecode"><span class="nav-number">1.2.3.</span> <span class="nav-text">JVM字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cross-platform"><span class="nav-number">1.2.4.</span> <span class="nav-text">跨平台</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jvm-implementations-editions-and-versions"><span class="nav-number">1.3.</span> <span class="nav-text">JVM部署，版本类型和升级版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#editions-and-versions"><span class="nav-number">1.3.1.</span> <span class="nav-text">版本类型和升级版本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#editions"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">版本类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#versions"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">升级版本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#installing-java"><span class="nav-number">1.4.</span> <span class="nav-text">安装Java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#application-output-aka-artifacts"><span class="nav-number">1.5.</span> <span class="nav-text">应用程序输出又叫Artifacts</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jar-files"><span class="nav-number">1.5.1.</span> <span class="nav-text">JAR文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#war-files"><span class="nav-number">1.5.2.</span> <span class="nav-text">WAR文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#running-java-applications"><span class="nav-number">1.6.</span> <span class="nav-text">运行Java应用程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#classpath"><span class="nav-number">1.6.1.</span> <span class="nav-text">Classpath</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-tools"><span class="nav-number">1.7.</span> <span class="nav-text">构建工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ant"><span class="nav-number">1.7.1.</span> <span class="nav-text">Ant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven"><span class="nav-number">1.7.2.</span> <span class="nav-text">Maven</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gradle"><span class="nav-number">1.7.3.</span> <span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#intellij-idea-build"><span class="nav-number">1.7.4.</span> <span class="nav-text">IntelliJ IDEA的构建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#frameworks-and-libraries"><span class="nav-number">1.8.</span> <span class="nav-text">框架和库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#json-serialization"><span class="nav-number">1.8.1.</span> <span class="nav-text">JSON序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unit-testing"><span class="nav-number">1.8.2.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mocking-frameworks"><span class="nav-number">1.8.3.</span> <span class="nav-text">模拟框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logging"><span class="nav-number">1.8.4.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ioc-containers"><span class="nav-number">1.8.5.</span> <span class="nav-text">IoC容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-clients"><span class="nav-number">1.8.6.</span> <span class="nav-text">HTTP客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web-frameworks"><span class="nav-number">1.8.7.</span> <span class="nav-text">Web框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#networking"><span class="nav-number">1.8.8.</span> <span class="nav-text">网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#other-libraries-and-utilities"><span class="nav-number">1.8.9.</span> <span class="nav-text">其它库和工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conventions"><span class="nav-number">1.9.</span> <span class="nav-text">约定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#namespaces"><span class="nav-number">1.9.1.</span> <span class="nav-text">命名空间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#property-and-method-names"><span class="nav-number">1.9.2.</span> <span class="nav-text">属性和方法名称</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tooling"><span class="nav-number">1.10.</span> <span class="nav-text">工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ides"><span class="nav-number">1.10.1.</span> <span class="nav-text">关于IDE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#continuous-integration"><span class="nav-number">1.10.2.</span> <span class="nav-text">持续集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#random-tools"><span class="nav-number">1.10.3.</span> <span class="nav-text">随机工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#intellij-idea-for-the-visual-studio-user"><span class="nav-number">1.11.</span> <span class="nav-text">站在Visual Studio用户角度看IntelliJ IDEA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#working-with-the-jvm"><span class="nav-number">1.12.</span> <span class="nav-text">在JVM上工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#class-loaders"><span class="nav-number">1.12.1.</span> <span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#creating-your-own-class-loaders"><span class="nav-number">1.12.1.1.</span> <span class="nav-text">创建你自己的类加载器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#more-information-on-class-loaders"><span class="nav-number">1.12.1.2.</span> <span class="nav-text">关于类加载器的更多信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dynamic-class-loading-from-current-module"><span class="nav-number">1.12.1.3.</span> <span class="nav-text">从当前动态类加载模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dynamic-class-loading-from-another-module"><span class="nav-number">1.12.1.4.</span> <span class="nav-text">从另一个模块中加载类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conferences"><span class="nav-number">1.13.</span> <span class="nav-text">会议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#changelog"><span class="nav-number">1.14.</span> <span class="nav-text">变更日志</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Crimson</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+  <script src="//code.jquery.com/jquery-1.7.2.min.js"></script>
+  
+  <script src="//dn-lbstatics.qbox.me/lbservice/busuanzi/1.0/busuanzi.mini.js"/></script>
+
+  <span id="container_site_counter">
+    本站总访问量<span id="value_site_counter"></span>次
+  </span>
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.content img').each(function () {
+        var $image = $(this);
+        var $imageWrapLink = $image.parent('a');
+
+        if ($imageWrapLink.size() < 1) {
+          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
+        }
+        $imageWrapLink.addClass('fancybox');
+      });
+    });
+    $('.fancybox').fancybox({
+      helpers: {
+        overlay: {
+          locked: false
+        }
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"crimsonguo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+</body>
+</html>
