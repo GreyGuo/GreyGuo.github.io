@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="图论,算法," />
+  <meta name="keywords" content="JAVA,工厂模式,设计模式," />
 
 
 
@@ -41,7 +41,7 @@
   </script>
 
 
-  <title> 本周算法：有向无环图的最短路径 // 郭楚沅的BLOG </title>
+  <title> 工厂方法设计模式的最佳实践 // 郭楚沅的BLOG </title>
 </head>
 
 <body>
@@ -272,7 +272,7 @@
           
           
             
-              本周算法：有向无环图的最短路径
+              工厂方法设计模式的最佳实践
             
           
         </h1>
@@ -280,14 +280,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-04-13
+          发表于 2015-02-08
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/算法/">算法</a>
+              <a href="/categories/设计模式/">设计模式</a>
 
               
               
@@ -300,8 +300,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/"></span>
+            <a href="/2015/02/08/工厂方法设计模式的最佳实践/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/08/工厂方法设计模式的最佳实践/"></span>
             </a>
           </span>
           
@@ -315,35 +315,75 @@
       
 
       
-        <p></p><h2>介绍</h2><br>我们已经知道了如何通过Dijkstra算法在非负权图中找到最短路径。即使图中有负权边，我们也知道通过Bellman-Ford算法找到一个从给定的源点到其它所有节点的最短路径。现在我们将看到一个在线性时间内运行得更快的算法，它可以在有向无环图中找到从一个给定的源点到其它所有可达顶点的最短路径，又名有向无环图（DAG）。<p></p>
-<a id="more"></a>
-<p>由于有向无环图无环所以我们不必担心负环的问题。正如我们已经知道在负环里讨论最短路径是毫无意义的一样，因为我们可以在这些环里不断“循环”，但实际上我们得到的路径将变得越来越短（构成负的环路，存在死循环）。</p>
-<p><a href="http://www.importnew.com/9690.html/1-negative-cycles" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9693" title="1.-Negative-Cycles" src="http://www.importnew.com/wp-content/uploads/2014/02/85e85de99a1d4b8296c3d498dc018549-300x193.png" alt="" width="300" height="193"></a></p>
-<p>负环的存在使我们试图找到最短路径的行为变得毫无意义！</p>
-<p>因此，我们要解决Dijkstra算法和的Bellman-Ford算法中的两个问题。首先，我们只需要非负的权重，其次，图中不能有环。好了，这样我们就可以通过这个算法处理满足这两种情况的例子了。</p>
-<p></p><h2>概述</h2><br>关于有向无环图（DAGs）我们首先要知道，它们可以很容易地进行拓扑排序。拓扑排序应用范围非常之广，其中最常用的或许就是用于安排依赖任务（依赖任务是同属于一个工作中相同任务的实体，这些实体是保证互连的，它们解决共同的问题）。<p></p>
-<p><a href="http://www.importnew.com/9690.html/2-topological-sort" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9694" title="2.-Topological-Sort" src="http://www.importnew.com/wp-content/uploads/2014/02/3ef7747e7f16098283037cfca7281fcc-300x193.png" alt="" width="300" height="193"></a></p>
-<p>拓扑排序通常是用来“排序”依赖任务的！</p>
-<p>经过拓扑排序，我们最终会得到一张DAG图的顶点列表，我们确信在拓扑排序列表中如果存在一条边（u，v），那么顶点u会先于顶点v进入列表中。</p>
-<p><a href="http://www.importnew.com/9690.html/3-topological-sort-part-2" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9695" title="3.-Topological-Sort-part-2" src="http://www.importnew.com/wp-content/uploads/2014/02/803b268420de1c495f6f7418967d7081-300x193.png" alt="" width="300" height="193"></a></p>
-<p>如果有一条边（u，v），那么顶点u一定在顶点v前面。这个结果通过这张图片变得更加通俗易懂。其中B和D之间没有边，但在列表中B在D前面！</p>
-<p>此信息异常重要，我们唯一需要做的事情就是通过这个排序列表来计算距离最短的路径，这和Dijkstra算法比较相似。</p>
-<p>好了，让我们来总结一下这个算法：</p>
-<p>-首先，我们必须对有向无环图进行拓扑排序;</p>
-<p>-其次，我们将到源点的距离初始化为0并将到其它所有顶点的距离设置为无穷大;</p>
-<p>-最后，对于列表中的每一个顶点，我们从它的所有邻节点中找到最短路径的那个顶点;</p>
-<p>这很像Dijkstra算法，但是其主要区别是我们使用了一个优先级队列，并且此次我们使用的是经过拓扑排序的列表。</p>
-<p></p><h2>代码</h2><br>此次的代码实际上是一段伪代码。虽然目前为止所有的例子都是用PHP编写，但是伪代码更易于理解，也不会将你与某一特定的语言实现绑定在一起。此外，如果你对给定的语言感到难以理解，那么对你而言读懂代码比阅读伪代码更加困难。<p></p>
-<pre class="brush: php; gutter: true; first-line: 1; highlight: []; html-script: false">Topologically sort G into L;
-Set the distance to the source to 0;
-Set the distances to all other vertices to infinity;
-For each vertex u in L
-   - Walk through all neighbors v of u;
-   - If dist(v) &gt; dist(u) + w(u, v) 
-      - Set dist(v) &lt;- dist(u) + w(u, v);</pre>
+        <p>在前面设计模式的例子中我们已经尝试了工厂模式，今天仍然经常会用到它。在这篇文章中我们将会学习到更加高级并且非常有吸引力的解决方案，这就是工厂方法设计模式。</p>
+<p><strong>定义：</strong></p>
+<p>工厂方法模式展示了一种创建对象的方法，它代替了对象来创建子类。工厂方法模式以一种特殊抽象层的方式解决了工厂模式中的类似问题。</p>
+<p>可以使用new关键字实例化对象，例如对象A创建了另一个对象B：</p>
+<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
+ClassB objB = new ClassB();
+</pre>
 
-<p></p><h2>应用</h2><br>我们必须使用这种算法的原因显而易见。唯一值得注意的问题是我们必须确保这个图没有环。但是，如果我们知道如何建立图，那么我们或多或少会有一些附加信息来确认这个图中是否有环 - 那么此时这个线性时间内的算法就会非常适用。<p></p>
-<p>原文链接：<a target="_blank" href="http://architects.dzone.com/articles/algorithm-week-shorted-path" class="external" rel="nofollow">dzone</a>   翻译：<a href="http://www.importnew.com" target="_blank" rel="external"> ImportNew.com </a> - <a href="http://www.importnew.com/author/gray" target="_blank" rel="external">郭楚沅</a><br>译文链接：<a href="http://www.importnew.com/9690.html" target="_blank" rel="external">http://www.importnew.com/9690.html</a><br>[ <span style="color:#ff0000"><b>转载请保留原文出处、译者和译文链接。</b></span>]<br><br></p>
+<p>此时对象A持有了对象B的引用。</p>
+<p><a href="http://www.importnew.com/10286.html/two-object-relationship" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/1333c70d66722d1f79fe7bea6da437b8.jpg" alt="" title="two-object-relationship" width="1080" height="234" class="alignnone size-full wp-image-10287"></a></p>
+<p>因为现在对象A依赖于对象B，如果后者发生变动那么我们必须对A进行重新编译。当然生命周期并不像这么简单，对象的创建非常复杂，如果有更多的耦合维护将是一个困难且昂贵的过程。</p>
+<p>为了避免这类情况的发生，就需要创建设计模式来解决。可以尝试在客户端和对象的创建者之间创建松耦合，并且给设计者带来其它的好处。工厂方法设计模式就是解决这类问题的方案之一。</p>
+<p><strong>常见使用：</strong></p>
+<p><strong>工厂方法设计模式</strong>普遍使用于各种框架之中，例如Struts, Spring, Apache和装饰设计模式的结合使用。这里也有多种基于工厂模式的J2EE模式，例如DAO模式。</p>
+<p>让我们来看一个关于服装工厂的例子，此时我们正在设计各种各样的衣服但是客户完全不知道这些服装是如何被创建的。虽然我们添加了一个新的服装类型像夹克，但是客户端代码不需要修改，这就增加了应用程序的灵活性。</p>
+<p><a href="http://www.importnew.com/10286.html/factory-pattern" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/2948e38bc61425749da367561470f655.jpg" alt="" title="Factory-Pattern" width="609" height="487" class="alignnone size-full wp-image-10288"></a></p>
+<p><strong>何时使用工厂方法设计模式？</strong></p>
+<ul><br><li>对象的创建如果需要代码复用却没有现成的代码可用时，工厂方法设计模式就派上用场了。</li><br><li>类并不知道需要创建的是什么子类。</li><br><li>子类可以指定应该创建什么样的对象。</li><br><li>父类会委托它的子类创建对象。</li><br></ul>
+
+<p><strong>结构</strong></p>
+<p>下图是强调工厂方法设计模式的一个典型结构。与前面的例子有所不同，这里多添加了一个抽象工厂（工厂）类。</p>
+<p><a href="http://www.importnew.com/10286.html/factory_method_design_pattern_01" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/ceb83dc71861b80570983cae57a70f76.jpg" alt="" title="Factory_Method_Design_Pattern_01" width="930" height="509" class="alignnone size-full wp-image-10289"></a></p>
+<p>对应图中的参与者如下：</p>
+<ul><br><li>产品：定义了工厂方法创建对象的接口。</li><br><li>具体产品：实现产品的接口。</li><br><li>工厂（创建者）：定义了工厂方法的抽象类并返回一个产品对象。</li><br><li>具体工厂：该类实现和覆盖了父工厂类声明的方法。</li><br></ul>
+
+<p>客户端（例如类A）想要使用被具体工厂类（类B）创建的产品。这样的话，客户端仅持有接口B的引用而不是对象‘类B’，这样就不需要知道任何有关类B的资源，事实上可以有多个类实现抽象类。</p>
+<p><strong>工厂方法模式类允许子类来决定实例化哪一个类，这意味着什么？</strong></p>
+<p>它基本上意味着工厂抽象类在不知道实际的具体产品角色类将被实例化为什么的情况下就能编码，例如它是裤子还是衬衫，这完全取决于具体的工厂类。</p>
+<p>现在让我们实现上述模式的商品服装厂（GarmentFactory）例子。</p>
+<p><a href="http://www.importnew.com/10286.html/factory_method_example_watermark" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/324e2791fc41c7f0647ea048057253d6.jpg" alt="" title="Factory_Method_Example_watermark" width="639" height="480" class="alignnone size-full wp-image-10290"></a></p>
+<p>让我们先做一些吧，我们不会为具体的产品例如Shirt.java和Trouser.java而重复写代码。这可以在<a href="http://idiotechie.com/?p=480" target="_blank" rel="external">工厂模式</a>这篇文章中找到。</p>
+<p>用户正面临着一个新的工厂抽象类的建立。</p>
+<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
+public abstract class Factory {
+    protected abstract GarmentType createGarments(String selection);
+}
+</pre>
+
+<p>服装工厂类需要修改来继承抽象工厂类。</p>
+<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
+public class GarmentFactory extends Factory{
+    public GarmentType createGarments(String selection) {
+        if (selection.equalsIgnoreCase(&#039;Trouser&#039;)) {
+            return new Trouser();
+        } else if (selection.equalsIgnoreCase(&#039;Shirt&#039;)) {
+            return new Shirt();
+        }
+        throw new IllegalArgumentException(&#039;Selection doesnot exist&#039;);
+    }
+}
+</pre>
+
+<p>客户端类指的是用工厂类和createGarments（选择）类的工厂方法在运行的时候创建产品。</p>
+<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
+Factory factory = new GarmentFactory();
+GarmentType objGarmentType = factory.createGarments(selection);
+System.out.println(objGarmentType.print());
+</pre>
+
+<p><strong>好处：</strong></p>
+<ul><br><li>代码灵活，松耦合和可复用性，将对象创建的代码从客户端移到了工厂类，那就是它的子类。这非常易于维护相关代码，因为对象的创建非常集中。</li><br><li>客户端代码只处理产品的接口，因此可以无需修改客户端的逻辑代码就能添加任何具体的产品。</li><br><li>工厂方法的优势之一就是可以多次返回相同的实例，或者可以返回一个子类而不是一个具体类型的对象。</li><br><li>它鼓励通过工厂创建代码对象的一致性，每个人都必须遵循一套明确的规则，这避免了在不同的客户端使用不同的构造函数。</li><br></ul>
+
+<p>例子：</p>
+<p>JDBC是该模式的一个很好的例子；数据库应用程序不需要知道它将使用哪种数据库，所以它也不知道应该使用什么具体的数据库驱动类。相反，它使用工厂方法来获取连接、语句和其它对象，这使得改变后台数据库变得非常灵活同时并不会改变你的DAO层。</p>
+<p>下面是一些关于SDK的例子：</p>
+<ul><br><li><code>valueOf()</code>方法会返回工厂创建的对象，这等同于参数传递的值。</li><br><li><code>getInstance()</code> 方法会使用单例模式创建类的实例。</li><br><li><code>newInstance()</code> 方法从每次调用工厂方法时创建和返回新实例。</li><br></ul>
+
+<p>下载<a href="http://idiotechie.com/?attachment_id=921" target="_blank" rel="external">示例代码</a>。</p>
+<p> 原文链接： <a target="_blank" href="http://www.javacodegeeks.com/2012/10/design-best-practices-using-factory-method-pattern.html" class="external" rel="nofollow">javacodegeeks</a>    翻译： <a href="http://www.importnew.com" target="_blank" rel="external"> ImportNew.com </a> - <a href="http://www.importnew.com/author/gray" target="_blank" rel="external">郭楚沅</a><br>译文链接： <a href="http://www.importnew.com/10286.html" target="_blank" rel="external">http://www.importnew.com/10286.html</a><br>[ <span style="color:#ff0000"><b>转载请保留原文出处、译者和译文链接。</b></span>]<br><br></p>
 
       
     </div>
@@ -352,9 +392,11 @@ For each vertex u in L
       
         <div class="post-tags">
           
-            <a href="/tags/图论/"> #图论 </a>
+            <a href="/tags/JAVA/"> #JAVA </a>
           
-            <a href="/tags/算法/"> #算法 </a>
+            <a href="/tags/工厂模式/"> #工厂模式 </a>
+          
+            <a href="/tags/设计模式/"> #设计模式 </a>
           
         </div>
       
@@ -363,11 +405,13 @@ For each vertex u in L
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2015/04/10/Your Path to a $16B exit Build a J2ME App/">160亿美元的收购，你怎么看？ 从开发一个J2ME应用说起</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/04/10/Your Path to a $16B exit Build a J2ME App/">160亿美元的收购，你怎么看？ 从开发一个J2ME应用说起</a>
+              <a href="/2015/01/01/第一章/">窈冥决【原创】</a>
             
           </div>
         </div>
@@ -383,8 +427,8 @@ For each vertex u in L
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/"
-               data-title="本周算法：有向无环图的最短路径" data-url="http://www.gcrimson.com/2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/">
+          <div class="ds-thread" data-thread-key="2015/02/08/工厂方法设计模式的最佳实践/"
+               data-title="工厂方法设计模式的最佳实践" data-url="http://www.gcrimson.com/2015/02/08/工厂方法设计模式的最佳实践/">
           </div>
         
       </div>
@@ -476,7 +520,7 @@ For each vertex u in L
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
