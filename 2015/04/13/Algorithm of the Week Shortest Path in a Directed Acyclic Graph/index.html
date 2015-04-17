@@ -318,14 +318,14 @@
         <p></p><h2>介绍</h2><br>我们已经知道了如何通过Dijkstra算法在非负权图中找到最短路径。即使图中有负权边，我们也知道通过Bellman-Ford算法找到一个从给定的源点到其它所有节点的最短路径。现在我们将看到一个在线性时间内运行得更快的算法，它可以在有向无环图中找到从一个给定的源点到其它所有可达顶点的最短路径，又名有向无环图（DAG）。<p></p>
 <a id="more"></a>
 <p>由于有向无环图无环所以我们不必担心负环的问题。正如我们已经知道在负环里讨论最短路径是毫无意义的一样，因为我们可以在这些环里不断“循环”，但实际上我们得到的路径将变得越来越短（构成负的环路，存在死循环）。</p>
-<p><a href="http://www.importnew.com/9690.html/1-negative-cycles" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9693" title="1.-Negative-Cycles" src="http://www.importnew.com/wp-content/uploads/2014/02/85e85de99a1d4b8296c3d498dc018549-300x193.png" alt="" width="300" height="193"></a></p>
+<p><a href="http://www.importnew.com/9690.html/1-negative-cycles" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9693" title="1.-Negative-Cycles" src="http://incdn1.b0.upaiyun.com/2014/02/85e85de99a1d4b8296c3d498dc018549.png" alt="" width="300" height="193"></a></p>
 <p>负环的存在使我们试图找到最短路径的行为变得毫无意义！</p>
 <p>因此，我们要解决Dijkstra算法和的Bellman-Ford算法中的两个问题。首先，我们只需要非负的权重，其次，图中不能有环。好了，这样我们就可以通过这个算法处理满足这两种情况的例子了。</p>
 <p></p><h2>概述</h2><br>关于有向无环图（DAGs）我们首先要知道，它们可以很容易地进行拓扑排序。拓扑排序应用范围非常之广，其中最常用的或许就是用于安排依赖任务（依赖任务是同属于一个工作中相同任务的实体，这些实体是保证互连的，它们解决共同的问题）。<p></p>
-<p><a href="http://www.importnew.com/9690.html/2-topological-sort" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9694" title="2.-Topological-Sort" src="http://www.importnew.com/wp-content/uploads/2014/02/3ef7747e7f16098283037cfca7281fcc-300x193.png" alt="" width="300" height="193"></a></p>
+<p><a href="http://www.importnew.com/9690.html/2-topological-sort" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9694" title="2.-Topological-Sort" src="http://incdn1.b0.upaiyun.com/2014/02/3ef7747e7f16098283037cfca7281fcc.png" alt="" width="300" height="193"></a></p>
 <p>拓扑排序通常是用来“排序”依赖任务的！</p>
 <p>经过拓扑排序，我们最终会得到一张DAG图的顶点列表，我们确信在拓扑排序列表中如果存在一条边（u，v），那么顶点u会先于顶点v进入列表中。</p>
-<p><a href="http://www.importnew.com/9690.html/3-topological-sort-part-2" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9695" title="3.-Topological-Sort-part-2" src="http://www.importnew.com/wp-content/uploads/2014/02/803b268420de1c495f6f7418967d7081-300x193.png" alt="" width="300" height="193"></a></p>
+<p><a href="http://www.importnew.com/9690.html/3-topological-sort-part-2" rel="external" target="_blank"><img class="aligncenter size-medium wp-image-9695" title="3.-Topological-Sort-part-2" src="http://incdn1.b0.upaiyun.com/2014/02/803b268420de1c495f6f7418967d7081.png" alt="" width="300" height="193"></a></p>
 <p>如果有一条边（u，v），那么顶点u一定在顶点v前面。这个结果通过这张图片变得更加通俗易懂。其中B和D之间没有边，但在列表中B在D前面！</p>
 <p>此信息异常重要，我们唯一需要做的事情就是通过这个排序列表来计算距离最短的路径，这和Dijkstra算法比较相似。</p>
 <p>好了，让我们来总结一下这个算法：</p>
