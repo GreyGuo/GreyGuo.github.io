@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="JAVA,工厂模式,设计模式," />
+  <meta name="keywords" content="IDE,JAVA," />
 
 
 
@@ -41,7 +41,7 @@
   </script>
 
 
-  <title> 工厂方法设计模式的最佳实践 // 郭楚沅的BLOG </title>
+  <title> 无IDE时编译和运行Java // 郭楚沅的BLOG </title>
 </head>
 
 <body>
@@ -280,7 +280,7 @@
           
           
             
-              工厂方法设计模式的最佳实践
+              无IDE时编译和运行Java
             
           
         </h1>
@@ -288,14 +288,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-02-08
+          发表于 2014-03-17
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/设计模式/">设计模式</a>
+              <a href="/categories/JAVA/">JAVA</a>
 
               
               
@@ -308,8 +308,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/02/08/工厂方法设计模式的最佳实践/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/02/08/工厂方法设计模式的最佳实践/"></span>
+            <a href="/2014/03/17/无IDE时编译和运行Java/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/03/17/无IDE时编译和运行Java/"></span>
             </a>
           </span>
           
@@ -323,76 +323,61 @@
       
 
       
-        <p>在前面设计模式的例子中我们已经尝试了工厂模式，今天仍然经常会用到它。在这篇文章中我们将会学习到更加高级并且非常有吸引力的解决方案，这就是工厂方法设计模式。</p>
-<p><strong>定义：</strong></p>
-<p>工厂方法模式展示了一种创建对象的方法，它代替了对象来创建子类。工厂方法模式以一种特殊抽象层的方式解决了工厂模式中的类似问题。</p>
+        <h2><span style="font-size: 13px;">最近 </span><a style="font-size: 13px;" href="http://www.reddit.com/r/java/" target="_blank" rel="external">Java subreddit</a><span style="font-size: 13px;"> 出现了一篇”</span><a style="font-size: 13px;" href="http://www.reddit.com/r/java/comments/21s5h3/compiling_java_packages_without_ide/" target="_blank" rel="external">在没有IDE的情况下编译Java包</a><span style="font-size: 13px;">“ 的帖子，这个帖子抛出了这么一个问题，“是否存在一个命令可以编译一组处于同一文件夹下独立包内的java文件的方法（这称之为bin），同时怎样运行新的类文件呢？” 它的提出者 </span><a style="font-size: 13px;" href="http://www.reddit.com/user/kylolink" target="_blank" rel="external">kylolink</a><span style="font-size: 13px;">解释说，“当我开始依赖Eclipse来编写代码时就开始担心没有Eclipse时自己该怎么写代码了。” 我看过很多次这类问题，事实上，这促使我（目前已经四年了）发了一篇文章： </span><a style="font-size: 13px;" href="http://marxsoftware.blogspot.com/2009/03/gps-systems-and-ides-helpful-or-harmful.html" target="_blank" rel="external">GPS系统和IDE：究竟是好还是坏？</a><span style="font-size: 13px;"> 我喜欢强大的现代化的Java的集成开发环境（IDE），因为它使得我的编程更加轻松，但知道如何构建和运行简单的Java示例也是有必要的，这篇文章主要就是着重于如何做到这些的。</span></h2>
+
 <a id="more"></a>
-<p>可以使用new关键字实例化对象，例如对象A创建了另一个对象B：</p>
-<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
-ClassB objB = new ClassB();
-</pre>
-
-<p>此时对象A持有了对象B的引用。</p>
-<p><a href="http://www.importnew.com/10286.html/two-object-relationship" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/1333c70d66722d1f79fe7bea6da437b8.jpg" alt="" title="two-object-relationship" width="1080" height="234" class="alignnone size-full wp-image-10287"></a></p>
-<p>因为现在对象A依赖于对象B，如果后者发生变动那么我们必须对A进行重新编译。当然生命周期并不像这么简单，对象的创建非常复杂，如果有更多的耦合维护将是一个困难且昂贵的过程。</p>
-<p>为了避免这类情况的发生，就需要创建设计模式来解决。可以尝试在客户端和对象的创建者之间创建松耦合，并且给设计者带来其它的好处。工厂方法设计模式就是解决这类问题的方案之一。</p>
-<p><strong>常见使用：</strong></p>
-<p><strong>工厂方法设计模式</strong>普遍使用于各种框架之中，例如Struts, Spring, Apache和装饰设计模式的结合使用。这里也有多种基于工厂模式的J2EE模式，例如DAO模式。</p>
-<p>让我们来看一个关于服装工厂的例子，此时我们正在设计各种各样的衣服但是客户完全不知道这些服装是如何被创建的。虽然我们添加了一个新的服装类型像夹克，但是客户端代码不需要修改，这就增加了应用程序的灵活性。</p>
-<p><a href="http://www.importnew.com/10286.html/factory-pattern" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/2948e38bc61425749da367561470f655.jpg" alt="" title="Factory-Pattern" width="609" height="487" class="alignnone size-full wp-image-10288"></a></p>
-<p><strong>何时使用工厂方法设计模式？</strong></p>
-<ul><br><li>对象的创建如果需要代码复用却没有现成的代码可用时，工厂方法设计模式就派上用场了。</li><br><li>类并不知道需要创建的是什么子类。</li><br><li>子类可以指定应该创建什么样的对象。</li><br><li>父类会委托它的子类创建对象。</li><br></ul>
-
-<p><strong>结构</strong></p>
-<p>下图是强调工厂方法设计模式的一个典型结构。与前面的例子有所不同，这里多添加了一个抽象工厂（工厂）类。</p>
-<p><a href="http://www.importnew.com/10286.html/factory_method_design_pattern_01" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/ceb83dc71861b80570983cae57a70f76.jpg" alt="" title="Factory_Method_Design_Pattern_01" width="930" height="509" class="alignnone size-full wp-image-10289"></a></p>
-<p>对应图中的参与者如下：</p>
-<ul><br><li>产品：定义了工厂方法创建对象的接口。</li><br><li>具体产品：实现产品的接口。</li><br><li>工厂（创建者）：定义了工厂方法的抽象类并返回一个产品对象。</li><br><li>具体工厂：该类实现和覆盖了父工厂类声明的方法。</li><br></ul>
-
-<p>客户端（例如类A）想要使用被具体工厂类（类B）创建的产品。这样的话，客户端仅持有接口B的引用而不是对象‘类B’，这样就不需要知道任何有关类B的资源，事实上可以有多个类实现抽象类。</p>
-<p><strong>工厂方法模式类允许子类来决定实例化哪一个类，这意味着什么？</strong></p>
-<p>它基本上意味着工厂抽象类在不知道实际的具体产品角色类将被实例化为什么的情况下就能编码，例如它是裤子还是衬衫，这完全取决于具体的工厂类。</p>
-<p>现在让我们实现上述模式的商品服装厂（GarmentFactory）例子。</p>
-<p><a href="http://www.importnew.com/10286.html/factory_method_example_watermark" rel="external" target="_blank"><img src="http://www.importnew.com/wp-content/uploads/2014/03/324e2791fc41c7f0647ea048057253d6.jpg" alt="" title="Factory_Method_Example_watermark" width="639" height="480" class="alignnone size-full wp-image-10290"></a></p>
-<p>让我们先做一些吧，我们不会为具体的产品例如Shirt.java和Trouser.java而重复写代码。这可以在<a href="http://idiotechie.com/?p=480" target="_blank" rel="external">工厂模式</a>这篇文章中找到。</p>
-<p>用户正面临着一个新的工厂抽象类的建立。</p>
-<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
-public abstract class Factory {
-    protected abstract GarmentType createGarments(String selection);
-}
-</pre>
-
-<p>服装工厂类需要修改来继承抽象工厂类。</p>
-<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
-public class GarmentFactory extends Factory{
-    public GarmentType createGarments(String selection) {
-        if (selection.equalsIgnoreCase(&#039;Trouser&#039;)) {
-            return new Trouser();
-        } else if (selection.equalsIgnoreCase(&#039;Shirt&#039;)) {
-            return new Shirt();
-        }
-        throw new IllegalArgumentException(&#039;Selection doesnot exist&#039;);
-    }
-}
-</pre>
-
-<p>客户端类指的是用工厂类和createGarments（选择）类的工厂方法在运行的时候创建产品。</p>
-<pre class="brush: java; gutter: true; first-line: 1; highlight: []; html-script: false">
-Factory factory = new GarmentFactory();
-GarmentType objGarmentType = factory.createGarments(selection);
-System.out.println(objGarmentType.print());
-</pre>
-
-<p><strong>好处：</strong></p>
-<ul><br><li>代码灵活，松耦合和可复用性，将对象创建的代码从客户端移到了工厂类，那就是它的子类。这非常易于维护相关代码，因为对象的创建非常集中。</li><br><li>客户端代码只处理产品的接口，因此可以无需修改客户端的逻辑代码就能添加任何具体的产品。</li><br><li>工厂方法的优势之一就是可以多次返回相同的实例，或者可以返回一个子类而不是一个具体类型的对象。</li><br><li>它鼓励通过工厂创建代码对象的一致性，每个人都必须遵循一套明确的规则，这避免了在不同的客户端使用不同的构造函数。</li><br></ul>
-
-<p>例子：</p>
-<p>JDBC是该模式的一个很好的例子；数据库应用程序不需要知道它将使用哪种数据库，所以它也不知道应该使用什么具体的数据库驱动类。相反，它使用工厂方法来获取连接、语句和其它对象，这使得改变后台数据库变得非常灵活同时并不会改变你的DAO层。</p>
-<p>下面是一些关于SDK的例子：</p>
-<ul><br><li><code>valueOf()</code>方法会返回工厂创建的对象，这等同于参数传递的值。</li><br><li><code>getInstance()</code> 方法会使用单例模式创建类的实例。</li><br><li><code>newInstance()</code> 方法从每次调用工厂方法时创建和返回新实例。</li><br></ul>
-
-<p>下载<a href="http://idiotechie.com/?attachment_id=921" target="_blank" rel="external">示例代码</a>。</p>
-<p> 原文链接： <a target="_blank" href="http://www.javacodegeeks.com/2012/10/design-best-practices-using-factory-method-pattern.html" class="external" rel="nofollow">javacodegeeks</a>    翻译： <a href="http://www.importnew.com" target="_blank" rel="external"> ImportNew.com </a> - <a href="http://www.importnew.com/author/gray" target="_blank" rel="external">郭楚沅</a><br>译文链接： <a href="http://www.importnew.com/10286.html" target="_blank" rel="external">http://www.importnew.com/10286.html</a><br>[ <span style="color:#ff0000"><b>转载请保留原文出处、译者和译文链接。</b></span>]<br><br></p>
+<p>我博客中一篇文章 <a href="http://marxsoftware.blogspot.com/2009/06/learning-java-via-simple-tests.html" target="_blank" rel="external">通过简单的测试学习Java</a>，其中写了我喜欢用一个简单的文本编辑器和命令行工具来编写并且运行简单的程序。现在我有个很棒的想法，是关于我最喜欢的Java IDE的，即早期决定使用IDE的好处是为了保证“开销”。在大多数实际应用程序中，毫无疑问IDE的开销是值得的。然而，对于最简单的示例应用程序并非总是如此。这篇文章的剩余部分展示了在没有遇到这些情况的前提下是如何构建和运行Java代码的。</p>
+<p><strong>建立和运行Java代码</strong></p>
+<p>为了对这篇文章进行更具体的讨论，我将使用一些非常简单的Java类,在同一个包中通过彼此相关的组合或继承（不在 <a href="http://marxsoftware.blogspot.com/2008/01/java-no-importing-of-type-from-unnamed.html" target="_blank" rel="external">未命名的包中</a>）来调用<code>dustin.examples</code>。这两个在第三个类之前是没有 <code>main</code> 函数的，直到 <code>Main.java</code> 才有 <code>main</code> 函数为了在没有IDE的情况下运行示例。三个类的代码清单如下。</p>
+<p><strong>Parent.java</strong></p>
+<p><pre class="brush: java; gutter: true">package dustin.examples;</pre></p>
+<p>public class Parent<br>{<br>   @Override<br>   public String toString()<br>   {<br>      return &quot;I&#039;m the Parent.&quot;;<br>   }<br>}<br><strong>Child.java</strong><strong><br></strong></p>
+<p><pre class="brush: java; gutter: true">package dustin.examples;</pre></p>
+<p>public class Child extends Parent<br>{<br>   @Override<br>   public String toString()<br>   {<br>      return &quot;I&#039;m the Child.&quot;;<br>   }<br>}<br><strong>Main.java</strong><strong><br></strong></p>
+<p><pre class="brush: java; gutter: true">package dustin.examples;</pre></p>
+<p>import static java.lang.System.out;</p>
+<p>public class Main<br>{<br>   private final Parent parent = new Parent();<br>   private final Child child = new Child();</p>
+<p>   public static void main(final String[] arguments)<br>   {<br>      final Main instance = new Main();<br>      out.println(instance.parent);<br>      out.println(instance.child);<br>   }<br>}<br>接下来显示了目录结构与这些类的 <code>.java</code> 源文件。截图显示源文件的目录层次结构代表了包名(<code>dustin/examples</code> 源自包 <code>dustin.examples</code>)和该子目录下被称为package-reflecting的目录层次结构 <code>src</code>。我还创建了 <code>classes</code> 子目录（当前为空）用于存放编译后文件 <code>.class</code> 文件，因为 <code>javac</code> 在目录不存在的情况下不会创建该目录。</p>
+<p><strong>用javac构建和运行java</strong></p>
+<p>无论使用哪种方法正常地构建Java代码（Ant, Maven, Gradle, 或者 IDE），我相信谨慎的做法是，至少了解如何使用 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/javac.html" target="_blank" rel="external">javac</a>来构建Java代码。Oracle/Sun的支持者们使用 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html" target="_blank" rel="external">javac</a> <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/" target="_blank" rel="external">命令行工具</a>的基本项来运行， <code>javac -help</code> 也可以运行 <code>javac -help -X</code>来查看其它的扩展选项。如何应用这些选项的更多细节可以在 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html" target="_blank" rel="external">Windows</a> 或者 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/javac.html" target="_blank" rel="external">Unix/Linux</a>的<code>javac</code>的文档工具查看。</p>
+<p>当进入 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/javac.html" target="_blank" rel="external">javac 文档</a> 时， <code>-sourcepath</code> 选项可以被用来表示源文件存在的路径。在上面所呈现的目录结构中，假设我在运行 <code>C:\java\examples\javacAndJava\</code> 目录的 <code>javac</code> 命令，这将意味着会需要这样的命令： <code>javac -sourcepath src src\dustin\examples*.java</code>。下一张截图显示了结果。</p>
+<p></p><p style="text-align: center;"><a href="http://incdn1.b0.upaiyun.com/2014/05/e2c4f7a2bb4e782c575034683aee3eea.png" target="_blank" rel="external"><img class="aligncenter size-full wp-image-11433" title="javacCompilingPackageDirectoryButToSameDirForClasses" src="http://incdn1.b0.upaiyun.com/2014/05/e2c4f7a2bb4e782c575034683aee3eea.png" alt="" width="677" height="244"></a></p><br>&nbsp;<p></p>
+<p>因为我们没有指定 <code>.class</code> 文件的目标目录，在默认情况下它们被放置在同一个目录下被编译的 <code>.java</code> 源文件。我们可以使用 <code>-d</code> 选项来纠正这种情况。我们现在可以运行的命令，例如 <code>javac -sourcepath src -d classes src\dustin\examples*.java</code>。如前所述，指定目标目录(<code>classes</code>)必须是存在的。这样，命令将会在下面的截图指定的目录下定位.class文件。</p>
+<p></p><p style="text-align: center;"><a href="http://incdn1.b0.upaiyun.com/2014/05/94de092ec400d1c02bec13f3db33d323.png" target="_blank" rel="external"><img class="aligncenter size-full wp-image-11434" title="javacDoptionPlacesClassesCorrectDir" src="http://incdn1.b0.upaiyun.com/2014/05/94de092ec400d1c02bec13f3db33d323.png" alt="" width="677" height="388"></a></p><br>&nbsp;<p></p>
+<p>用Java源文件编译成适当的 <code>.class</code> 文件在指定的目录中，我们现在可以运行Java应用程序启动命令行工具 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/java.html" target="_blank" rel="external">java</a>。这仅仅是通过by <code>java -help</code> 所示的指令或者是 <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/windows/java.html" target="_blank" rel="external">java工具页</a> 和<code>.class</code> 文件的 <code>-classpath</code> 所指定的地方(或 <code>-cp</code>)选项。使用两种方法来指定 <code>classes</code>目录以便用于找到 <code>.class</code> 文件，接下来的截图印证了这点。最后一个参数是完全合格的（整个Java包）类名，它有一个 <code>main</code> 函数来执行。下面的截图显示了<code>java -cp classes dustin.examples.Main</code> 和<code>java -classpath classes dustin.examples.Main</code>的命令。</p>
+<p></p><p style="text-align: center;"><a href="http://incdn1.b0.upaiyun.com/2014/05/50aba61b44d4e7316cdfc7d0a5f6cb98.png" target="_blank" rel="external"><img class="aligncenter size-full wp-image-11435" title="javaRunningSimpleExamplesParentChildMain" src="http://incdn1.b0.upaiyun.com/2014/05/50aba61b44d4e7316cdfc7d0a5f6cb98.png" alt="" width="677" height="160"></a></p><br>&nbsp;<p></p>
+<p><strong>构建和运行Ant</strong></p>
+<p>对于最简单的Java应用程序， <code>javac</code> and <code>java</code> 使用起来非常简单，它们用于构建并执行应用程序就分别证明了这一点。应用程序会稍微复杂一点（如代码中存在多个包/目录或更复杂的依赖于第三方库和框架的类路径），但这种方法非常难用。 <a href="http://ant.apache.org/" target="_blank" rel="external">Apache Ant</a> 是最古老的“三巨头”，它是被用于成千上万的应用程序部署的Java构建工具。正如我讨论过 <a href="http://marxsoftware.blogspot.com/2009/06/learning-java-via-simple-tests.html" target="_blank" rel="external">以前的一篇博客</a>，一个基础的Ant构建文件很容易被创建，特别是如果都始于一个模板就像我在 <a href="http://marxsoftware.blogspot.com/2009/06/learning-java-via-simple-tests.html" target="_blank" rel="external">这篇文章中</a>介绍的一样。</p>
+<p>接下来的代码是Ant的 <code>build.xml</code> 文件的，它将 <code>.java</code> 文件 编译成 <code>.class</code>文件然后运行 <code>dustin.examples.Main</code> 类就像上面的 <code>javac</code> 和 <code>java</code>一样。</p>
+<p><strong>build.xml</strong><strong><br></strong></p>
+<p><pre class="brush: xml; gutter: true">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br>&lt;project name=&quot;BuildingSansIDE&quot; default=&quot;run&quot; basedir=&quot;.&quot;&gt;<br>   &lt;description&gt;Building Simple Java Applications Without An IDE&lt;/description&gt;</pre></p>
+<p>   &lt;target name=&quot;compile&quot;<br>           description=&quot;Compile the Java code.&quot;&gt;<br>      &lt;javac srcdir=&quot;src&quot;<br>             destdir=&quot;classes&quot;<br>             debug=&quot;true&quot;<br>      includeantruntime=&quot;false&quot; /&gt;<br>   &lt;/target&gt;</p>
+<p>   &lt;target name=&quot;run&quot; depends=&quot;compile&quot;<br>           description=&quot;Run the Java application.&quot;&gt;<br>      &lt;java classname=&quot;dustin.examples.Main&quot; fork=&quot;true&quot;&gt;<br>         &lt;classpath&gt;<br>           &lt;pathelement path=&quot;classes&quot;/&gt;<br>         &lt;/classpath&gt;<br>      &lt;/java&gt;<br>   &lt;/target&gt;<br>&lt;/project&gt;<br>我没有使用Ant也没有包括一般所用的方式（例如 “clean” 和 “javadoc”），我使用的是 <code>javac</code>和 <code>java</code>来使例子尽可能的简单。请注意我使用了”debug”来给<a href="http://ant.apache.org/manual/Tasks/javac.html" target="_blank" rel="external">javac Ant 任务</a>设置”true”;因为这不是Ant的默认方式而是javac的默认方式。的确，Ant的 <a href="http://ant.apache.org/manual/Tasks/javac.html" target="_blank" rel="external">javac task</a> 和 <a href="http://ant.apache.org/manual/Tasks/java.html" target="_blank" rel="external">java task</a>与 <code>javac</code> and <code>java</code>的命令工具非常相似。</p>
+<p>因为我希望使用默认名称Ant来构建文件的时候不显式指定（<code>build.xml</code>），因为我提供“运行”的目标，构建文件的“默认形式”，因为“编译”作为一个依赖包括“运行”的目标，此外Ant是我的环境路径，我所需要做的是在命令行上让Ant来编译运行目录下的“ant”类型的 <code>build.xml</code>文件示例，下图就印证了这一点。</p>
+<p>&nbsp;</p>
+<p></p><p style="text-align: center;"><a href="http://incdn1.b0.upaiyun.com/2014/05/99cfb2271b636436edc1c43dae1d9180.png" target="_blank" rel="external"><img class="aligncenter size-full wp-image-11439" title="antCompilingAndRunningSimpleJavaApp" src="http://incdn1.b0.upaiyun.com/2014/05/99cfb2271b636436edc1c43dae1d9180.png" alt="" width="677" height="532"></a></p><br>虽然我演示了用Ant编译和运行一个简单的Java应用程序，通常我只用Ant进行编译同时用<code>java</code>来运行（或者如果classpath非常复杂时就使用 <code>java</code>脚本来执行）。<p></p>
+<p><strong>用Maven来搭建和运行</strong></p>
+<p>虽然Ant是第一个主流的Java构建工具， <a href="http://maven.apache.org/" target="_blank" rel="external">Apache Maven</a> 最终获得了成功在很大程度上要感谢它采用的配置是按照惯例同时也支持常见的库。当代码和生成的 <a href="http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html" target="_blank" rel="external">标准目录布局</a>对象一致时，Maven很容易使用。很遗憾，我的例子不遵循这个目录结构，但Maven允许我 <a href="https://maven.apache.org/guides/mini/guide-using-one-source-directory.html" target="_blank" rel="external">覆盖默认的目录结构</a>。下面的Maven POM文件覆盖了源代码和目标目录以及提供了一个Maven构建所需的最小元素，此时Maven的版本是<a href="http://maven.apache.org/docs/3.2.1/release-notes.html" target="_blank" rel="external">Maven 3.2.1</a>。</p>
+<p><strong>pom.xml</strong><strong><br></strong></p>
+<p><pre class="brush: xml; gutter: true">&lt;project&gt;<br>   &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;<br>   &lt;groupId&gt;dustin.examples&lt;/groupId&gt;<br>   &lt;artifactId&gt;CompilingAndRunningWithoutIDE&lt;/artifactId&gt;<br>   &lt;version&gt;1&lt;/version&gt;</pre></p>
+<p>   &lt;build&gt;<br>      &lt;defaultGoal&gt;compile&lt;/defaultGoal&gt;<br>      &lt;sourceDirectory&gt;src&lt;/sourceDirectory&gt;<br>      &lt;outputDirectory&gt;classes&lt;/outputDirectory&gt;<br>      &lt;finalName&gt;${project.artifactId}-${project.version}&lt;/finalName&gt;<br>   &lt;/build&gt;<br>&lt;/project&gt;<br>因为上面的 <code>pom.xml</code> 文件指定了一个“compile”的“defaultGoal”， <code>pom.xml</code> 是默认定义的POM文件，用执行器（mvn）来搜索，因为Maven安装的 <code>bin</code> 文件夹在我的path环境变量中，我只需要运行“mvn”来编译 <code>.class</code> 文件，这在下张截图中将会显示。</p>
+<p></p><p style="text-align: center;"><a href="http://incdn1.b0.upaiyun.com/2014/05/5ef431c6cd6bb701c8425adc1c66d052.png" target="_blank" rel="external"><img class="aligncenter size-full wp-image-11436" title="mavenCompilingJavaCode" src="http://incdn1.b0.upaiyun.com/2014/05/5ef431c6cd6bb701c8425adc1c66d052.png" alt="" width="677" height="772"></a></p><br>&nbsp;<p></p>
+<p></p><p style="text-align: center;">我也可以用Maven的 <code>mvn exec:java -Dexec.mainClass=dustin.examples.Main</code>命令来运行编译后的应用程序，下图得以展示。<a href="http://incdn1.b0.upaiyun.com/2014/05/b5b04eb975afa7b5602dc8fd828b9df2.png" target="_blank" rel="external"><img class="aligncenter size-full wp-image-11440" title="mavenRunningSimpleApp" src="http://incdn1.b0.upaiyun.com/2014/05/b5b04eb975afa7b5602dc8fd828b9df2.png" alt="" width="677" height="424"></a></p><br>与Ant一样，我通常不使用Maven运行简单的Java应用程序，而是用 <code>java</code> 运行编译后的代码（或者使用脚本直接调用 <code>java</code> 的classpath路径）。<p></p>
+<p><strong>用Gradle构建和运行</strong></p>
+<p><a href="http://www.gradle.org/" target="_blank" rel="external">Gradle</a> 是最新，最流行和最时尚的三大主流Java构建工具之一。我有时会怀疑时髦东西的本质，但是我发现了有不少东西 <a href="http://marxsoftware.blogspot.com/2011/11/first-look-at-building-java-with-gradle.html" target="_blank" rel="external">例如Gradle</a> （用Groovy编写的XML， 内置Ant支持和Ivy支持，配置按照惯例很容易被覆盖，Maven存储库支持等）。下一个例子显示了一个Gradle构建文件，它可用于编译和运行一个简单的应用程序，这里主要展示一下示例代码。它改编自我在博客 <a href="http://marxsoftware.blogspot.com/2013/12/simple-gradle-java-plugin-customization.html" target="_blank" rel="external">简单Gradle Java插件定义</a>的例子。</p>
+<p><strong>build.gradle</strong><strong><br></strong></p>
+<p><pre class="brush: text; gutter: true">apply plugin: &#039;java&#039;<br>apply plugin: &#039;application&#039;</pre></p>
+<p>// Redefine where Gradle should expect Java source files (*.java)<br>sourceSets {<br>    main {<br>        java {<br>            srcDirs &#039;src&#039;<br>        }<br>    }<br>}</p>
+<p>// Redefine where .class files are written<br>sourceSets.main.output.classesDir = file(&quot;classes&quot;)</p>
+<p>// Specify main class to be executed<br>mainClassName = &quot;dustin.examples.Main&quot;</p>
+<p>defaultTasks &#039;compileJava&#039;, &#039;run&#039;<br>前两行 <code>build.gradle</code> 文件指定 <a href="http://www.gradle.org/docs/current/userguide/java_plugin.html" target="_blank" rel="external">Java plugin</a> 和 <a href="http://www.gradle.org/docs/current/userguide/application_plugin.html" target="_blank" rel="external">Application plugin</a>的应用程序，它将许多功能自动构建。“sourceSets” 和 “sourceSets.main.output.classesDir”的定义允许覆盖Gradle’s Java 插件各自的Java源代码和编译文件类的默认目录。“mainClassName”明确了规范类应该作为应用程序的一部分插件运行。“defaultTasks”指定要运行的任务，只需在命令行键入：‘compileJava’是一个标准的提供任务的Java插件，‘run’是一个标准的提供任务的应用程序的插件。因为我称构建文件为 <code>build.gradle</code> ，因为我指定默认的‘compileJava’任务和‘run’ 方式，因为我有Gradle的 <code>bin</code>文件夹安装目录，我需要做的就是构建和运行示例来 键入“gradle”命令，接下来将得到证实。</p>
+<p></p><p style="text-align: center;"><a href="http://incdn1.b0.upaiyun.com/2014/05/7e1b4195c83ec62003a108ed8092e0bf.png" target="_blank" rel="external"><img class="aligncenter size-full wp-image-11432" title="gradleBuildAndRunSimpleExampleJavacJava" src="http://incdn1.b0.upaiyun.com/2014/05/7e1b4195c83ec62003a108ed8092e0bf.png" alt="" width="677" height="712"></a></p><br>&nbsp;<p></p>
+<p>甚至最大的怀疑者都承认Gradle构建对于这个简单示例都非常方便。它的某些约定和假设结合了简洁的依赖，很容易根据需要重写选择违约的机制。这一事实，这在Groovy而不是XML中也非常吸引人！</p>
+<p>Ant和Maven一样，我倾向于只用这些工具，通过 <code>java</code> 或者脚本调用 <code>java</code>来直接构建和运行编译好的 <code>.class</code>文件。顺便说一下，我通常也保存这些 <code>.class</code> 文件为JAR来运行，但这超出了本文的范围。</p>
+<p><strong>总结</strong></p>
+<p>IDE通常没有必要构建简单的应用程序和例子，它的开销甚至比最简单的例子都要多，这时直接使用 <code>javac</code> 和 <code>java</code> 来构建和运行实例就显得非常方便。为了使Ant，Maven或者Gradle的构建工具变得更加有吸引力，许多IDE支持着这些构件工具，这意味着开发者要将构件工具转移到IDE上，如果已经确定了先前创建的过程，那么IDE支持的简单应用就已经成长为了一个成熟的项目。</p>
+<p>&nbsp;</p>
+<p> 原文链接： <a target="_blank" href="http://java.dzone.com/articles/compiling-and-running-java" class="external" rel="nofollow">dzone</a>    翻译： <a href="http://www.importnew.com" target="_blank" rel="external"> ImportNew.com </a> - <a href="http://www.importnew.com/author/gray" target="_blank" rel="external">郭楚沅</a><br>译文链接： <a href="http://www.importnew.com/11370.html" target="_blank" rel="external">http://www.importnew.com/11370.html</a><br>[ <span style="color:#ff0000"><b>转载请保留原文出处、译者和译文链接。</b></span>]<br><br></p>
 
       
     </div>
@@ -401,11 +386,9 @@ System.out.println(objGarmentType.print());
       
         <div class="post-tags">
           
+            <a href="/tags/IDE/"> #IDE </a>
+          
             <a href="/tags/JAVA/"> #JAVA </a>
-          
-            <a href="/tags/工厂模式/"> #工厂模式 </a>
-          
-            <a href="/tags/设计模式/"> #设计模式 </a>
           
         </div>
       
@@ -414,13 +397,11 @@ System.out.println(objGarmentType.print());
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/04/10/Your Path to a $16B exit Build a J2ME App/">160亿美元的收购，你怎么看？ 从开发一个J2ME应用说起</a>
+              <a href="/2014/10/08/JVM最简生存指南/">JVM最简生存指南</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/01/01/第一章/">窈冥决【原创】</a>
             
           </div>
         </div>
@@ -436,8 +417,8 @@ System.out.println(objGarmentType.print());
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/02/08/工厂方法设计模式的最佳实践/"
-               data-title="工厂方法设计模式的最佳实践" data-url="http://www.gcrimson.com/2015/02/08/工厂方法设计模式的最佳实践/">
+          <div class="ds-thread" data-thread-key="2014/03/17/无IDE时编译和运行Java/"
+               data-title="无IDE时编译和运行Java" data-url="http://www.gcrimson.com/2014/03/17/无IDE时编译和运行Java/">
           </div>
         
       </div>
@@ -529,7 +510,7 @@ System.out.println(objGarmentType.print());
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">最近 Java subreddit 出现了一篇”在没有IDE的情况下编译Java包“ 的帖子，这个帖子抛出了这么一个问题，“是否存在一个命令可以编译一组处于同一文件夹下独立包内的java文件的方法（这称之为bin），同时怎样运行新的类文件呢？” 它的提出者 kylolink解释说，“当我开始依赖Eclipse来编写代码时就开始担心没有Eclipse时自己该怎么写代码了。” 我看过很多次这类问题，事实上，这促使我（目前已经四年了）发了一篇文章： GPS系统和IDE：究竟是好还是坏？ 我喜欢强大的现代化的Java的集成开发环境（IDE），因为它使得我的编程更加轻松，但知道如何构建和运行简单的Java示例也是有必要的，这篇文章主要就是着重于如何做到这些的。</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
