@@ -1,0 +1,1052 @@
+<!doctype html>
+<html class="theme-next use-motion ">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.2"/>
+
+
+    <meta name="description" content="郭楚沅的BLOG" />
+
+
+
+  <meta name="keywords" content="HashMap,JDK," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2" />
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?your-analytics-id";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <title> 大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove // 郭楚沅的BLOG </title>
+</head>
+
+<body>
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">郭楚沅的BLOG</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          首页
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-categories">
+        <a href="/categories">
+          <i class="menu-item-icon icon-categories"></i> <br />
+          分类
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          归档
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-tags">
+        <a href="/tags">
+          <i class="menu-item-icon icon-tags"></i> <br />
+          标签
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-about">
+        <a href="/about">
+          <i class="menu-item-icon icon-about"></i> <br />
+          关于
+        </a>
+      </li>
+    
+  </ul>
+
+  <li> <a title="把这个链接拖到你的Chrome收藏夹工具栏中" href='javascript:(function() {
+  function c() {
+    var e = document.createElement("link");
+    e.setAttribute("type", "text/css");
+    e.setAttribute("rel", "stylesheet");
+    e.setAttribute("href", f);
+    e.setAttribute("class", l);
+    document.body.appendChild(e)
+  }
+ 
+  function h() {
+    var e = document.getElementsByClassName(l);
+    for (var t = 0; t < e.length; t++) {
+      document.body.removeChild(e[t])
+    }
+  }
+ 
+  function p() {
+    var e = document.createElement("div");
+    e.setAttribute("class", a);
+    document.body.appendChild(e);
+    setTimeout(function() {
+      document.body.removeChild(e)
+    }, 100)
+  }
+ 
+  function d(e) {
+    return {
+      height : e.offsetHeight,
+      width : e.offsetWidth
+    }
+  }
+ 
+  function v(i) {
+    var s = d(i);
+    return s.height > e && s.height < n && s.width > t && s.width < r
+  }
+ 
+  function m(e) {
+    var t = e;
+    var n = 0;
+    while (!!t) {
+      n += t.offsetTop;
+      t = t.offsetParent
+    }
+    return n
+  }
+ 
+  function g() {
+    var e = document.documentElement;
+    if (!!window.innerWidth) {
+      return window.innerHeight
+    } else if (e && !isNaN(e.clientHeight)) {
+      return e.clientHeight
+    }
+    return 0
+  }
+ 
+  function y() {
+    if (window.pageYOffset) {
+      return window.pageYOffset
+    }
+    return Math.max(document.documentElement.scrollTop, document.body.scrollTop)
+  }
+ 
+  function E(e) {
+    var t = m(e);
+    return t >= w && t <= b + w
+  }
+ 
+  function S() {
+    var e = document.createElement("audio");
+    e.setAttribute("class", l);
+    e.src = i;
+    e.loop = false;
+    e.addEventListener("canplay", function() {
+      setTimeout(function() {
+        x(k)
+      }, 500);
+      setTimeout(function() {
+        N();
+        p();
+        for (var e = 0; e < O.length; e++) {
+          T(O[e])
+        }
+      }, 15500)
+    }, true);
+    e.addEventListener("ended", function() {
+      N();
+      h()
+    }, true);
+    e.innerHTML = " <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>";
+    document.body.appendChild(e);
+    e.play()
+  }
+ 
+  function x(e) {
+    e.className += " " + s + " " + o
+  }
+ 
+  function T(e) {
+    e.className += " " + s + " " + u[Math.floor(Math.random() * u.length)]
+  }
+ 
+  function N() {
+    var e = document.getElementsByClassName(s);
+    var t = new RegExp("\\b" + s + "\\b");
+    for (var n = 0; n < e.length; ) {
+      e[n].className = e[n].className.replace(t, "")
+    }
+  }
+ 
+  var e = 30;
+  var t = 30;
+  var n = 350;
+  var r = 350;
+  var i = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3";
+  var s = "mw-harlem_shake_me";
+  var o = "im_first";
+  var u = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
+  var a = "mw-strobe_light";
+  var f = "//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css";
+  var l = "mw_added_css";
+  var b = g();
+  var w = y();
+  var C = document.getElementsByTagName("*");
+  var k = null;
+  for (var L = 0; L < C.length; L++) {
+    var A = C[L];
+    if (v(A)) {
+      if (E(A)) {
+        k = A;
+        break
+      }
+    }
+  }
+  if (A === null) {
+    console.warn("Could not find a node of the right size. Please try a different page.");
+    return
+  }
+  c();
+  S();
+  var O = [];
+  for (var L = 0; L < C.length; L++) {
+    var A = C[L];
+    if (v(A)) {
+      O.push(A)
+    }
+  }
+})()    '>越摇越烈</a> </li>
+
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2014-02-17
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/JAVA/">JAVA</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>这篇文章对常见HashMap实现进行了性能评估。以JDK HashMap为基线，涵盖了5个知名的函数。用原始类型、对象分别作为key和Value组合进行测试，并给出测试报告。</p>
+<div><br><h2>介绍</h2><br>这篇文章将会介绍以JDK中<code>HashMap</code>作为标准的五种知名库的hash map实现，并逐一测试：<br><ul><br>    <li>原始数据类型到原始数据类型的映射</li><br>    <li>原始数据类型到对象的映射</li><br>    <li>对象到原始数据类型的映射</li><br>    <li>对象到对象的映射（JDK仅在这部分出现）</li><br></ul><br>这篇文章将会综述一个测试——使用一组随机key进行map读取访问（给定大小的待测试Collection共用同一组key）。<br><br><a id="more"></a><br><br>我们也会关注这些集合内的数据存储方式和一些颇为有趣的实现细节。<br><h2>评估对象</h2><br><h3>JDK 8</h3><br>在这个测试中，JDK中的<code>HashMap</code>是最古老的hash map实现。最近它有两个主要的更新——一个在Java 7u40版本中对于空map的<a href="http://java-performance.info/core-java-7-change-log/" target="_blank">共享的底层存储</a>，以及在Java 8中将底层hash bucket链接成为哈希树（改进更差情况下的性能）。<br><h3>FastUtil 6.5.15</h3><br><a href="http://fastutil.di.unimi.it/" rel="nofollow" target="_blank">FastUtil</a>为开发者提供了一套涵盖上述四个方面的API（包括所有基本类型和对象的组合）。除了那些，这也有一些其它类型的映射适用于每一个参数的类型组合：数组映射、AVL树映射和RB树映射。然后，这篇文章中我们只对hash映射感兴趣。<br><h3>Goldman Sachs Collections 5.1.0</h3><br>高盛集团在三年前公开了<a href="https://github.com/goldmansachs/gs-collections" rel="nofollow" target="_blank">他的集合库</a>的源代码。在我看来，（如果你有需要）这个库提供最宽泛的开箱即用的集合。你应该注意你需要的不仅仅是一个hash map、tree map和你工作所需的其它东西。本文的目标，GS collections为每一个hash map提供了一个常规的、同步的和不可修改的版本。最后两个仅仅提供了常规的映射，所以没有什么性能优势。<br><h3>HPPC 0.6.1</h3><br><a href="http://labs.carrotsearch.com/hppc.html" rel="nofollow" target="_blank">HPPC</a>为所有原始数据类型提供了数组列表、数组队列、哈希集合和哈希映射。HPPC为原始数据类型key提供了普通的hash map，并且为object key提供了普通的和带标识的hash map。<br><h3>Koloboke 0.6</h3><br><a href="https://github.com/OpenHFT/Koloboke" rel="nofollow" target="_blank">Koloboke</a>是这篇文章中最年轻的库。它是<a href="https://github.com/leventov/" rel="nofollow" target="_blank">Roman Leventov</a>开发的<a href="http://openhft.net/" rel="nofollow" target="_blank">OpenHFT</a>工程中的一部分。目前该库为所有原始数据类型或对象的组合提供了hash map和hash set。这个库最近被重命名成了HFTC，因此在一些我测试的实例中会使用一些旧的库名。<br><h3>Trove 3.0.3</h3><br><a href="http://trove.starlight-systems.com/" rel="nofollow" target="_blank">Trove</a>发布了很长的时间且十分稳定。不幸的是，现在这个项目已经没有进一步的开发。Trove为所有的原始数据类型、对象的组合提供了链表、栈、队列、hash set和hash map。我曾经写过一篇<a href="http://java-performance.info/primitive-types-collections-trove-library/" target="_blank">关于Trove</a>的文章。<br><h2>数据存储的实现和测试</h2><br>本文将着眼于4种不同的map：<br><ol><br>    <li><code>int</code>-<code>int</code></li><br>    <li><code>int</code>-<code>Integer</code></li><br>    <li><code>Integer</code>-<code>int</code></li><br>    <li><code>Integer</code>-<code>Integer</code></li><br></ol><br>让我们来看看这些map各自是如何存储数据的。我们将参考测试命名而不是实际实现的名字。因为许多这些实现调用方式十分相似，同时也不容易通过命名来区分。在了解实现细节之后，我们将验证它们是如何影响实际的测试结果。<br><br>我们将会使用<a href="http://java-performance.info/jmh/" target="_blank">JMH 1.0</a>来测试。这里是测试描述：遍历所有大小在（10K、100K、1M、10M和100M）的映射（外循环）从而生成一组随机key（它们将在给定大小的映射中进行测试），然后运行每一个测试来实现映射（内循环）。每一个测试将会运行<code>1亿次 / map_size</code>（以便我们对每个测试实例调用<code>map.get </code>1亿次）。<br><ol><br>    <li>准备：设置好一组int key和所需的填充因子</li><br>    <li>初始化一个map给定<strong>填充因子和容量=key的数量</strong></li><br>    <li>填充map的key，设置<strong>values = keys</strong></li><br>    <li>存储一个key数组引用或者转换为Integer[]型用以测试object key（否则会使用相同的key）</li><br>    <li>所有的测试几乎是相同的——得到key数组所存储的值然后再使用这些值，这样JVM将不会优化你的代码：</li><br></ol><br><pre class="brush: java; gutter: true">public int runRandomTest() {<br>    int res = 0;<br>    for ( int i = 0; i &lt; m_keys.length; ++i )<br>        res = res ^ m_map.get( m_keys[ i ] );<br>    return res;<br>}</pre><br><h3>int-int</h3><br><table border="1"><br><tbody><br><tr><br><td>tests.maptests.primitive.FastUtilMapTest</td><br><td>int[] keys, int[] values, boolean[] used</td><br></tr><br><tr><br><td>tests.maptests.primitive.GsMutableMapTest</td><br><td>int[] keys, int[] values</td><br></tr><br><tr><br><td>tests.maptests.primitive.HftcMutableMapTest</td><br><td>long[] (key-low bits, value-high bits)</td><br></tr><br><tr><br><td>tests.maptests.primitive.HppcMapTest</td><br><td>int[] keys, int[] values, boolean[] allocated</td><br></tr><br><tr><br><td>tests.maptests.primitive.TroveMapTest</td><br><td>int[] _set, int[] _values, byte[] _states</td><br></tr><br></tbody><br></table><br>如你所见，FastUtil、HPPC和Trove使用相同的存储，所以可以预见它们有相同的性能。<br><h3>处理GS Collections和Koloboke中空单元和被删除的单元</h3><br><strong>GS collections</strong>只使用了键值数组。如果你曾经接触过hash map的实现应该知道，一个map应该至少可以从占用的集合中区分空单元（一些映射也使用“被删除的单元”来标记）。如果没有额外存储，你要怎样实现这些功能呢？GS <code>IntIntHashMap</code>使用了一个包括<strong>key=0</strong>（空单元）和key=1（被删除单元）的合作哨兵对象（sentinel object）。所有在keys=0或者1上的操作都在这个哨兵对象上完成。这样，一个对象允许GS<code>IntIntHashMap</code>来使用复杂度为O(1)的存储来标记而不是使用O（容量）来标记。这样只需访问2个存储单元而不是3个，操作起来更快速。<br><br><strong>Koloboke </strong><code>int</code>-<code>int</code> map（map的实际名称隐藏在工厂类中且可能变化）的实现更进一步。首先，一些例子中它使用更长的数据类型数组作为存储，这能让键值保持在一个元素中。<code>int</code>-<code>int map</code>是这种方法的一个例子：一个key被存储在<code>long</code>类型的低32位，值则被存放在高32位上。在这样的布局下，查找冷门数据时只会出现1次缓存未命中。GS collections可能会出现2次不中，其他情况可能会有3次。<br><br>Koloboke使用了一种完全不同的技术来标记没有使用的条目。当一个map初始化后，它随机选择一个<code>int</code>，使用它作为一个自由的单元标记。如果你尝试插入一个key = 自由单元标记，它就会获取另一个map中不存在的随机值。这意味着Koloboke仅仅4使用了个字节就极其高效地处理了空节点。<br><br>一般而言，这种方式不会强加任何性能上的损失，除非你的映射大小非常接近一个给定数据类型的上限。你可能会想，如果在更小的key数据类型情况下会发生什么？如果想要添加所有数据类型进入map，那么将会得到一个在koloboke-api库中定义的<code>HashOverflowException</code>。可以使用以下这些测试来重现这种情况：<br><pre class="brush: java; gutter: true">HashByteIntMap m = HashByteIntMaps.newMutableMap( 256 );<br>for ( int i = Byte.MIN_VALUE; i &lt; Byte.MAX_VALUE; ++i )<br>{<br>    final byte key = (byte) i;<br>    m.put( key, i );<br>}<br>m.put( Byte.MAX_VALUE, 127 );   //exception will be thrown here<br>System.out.println( m.size() );</pre><br>然而，在现实生活中这还不算问题。如果你想将每个或者大多数<code>byte、char、short</code>映射到一些值的话，最好使用key索引下的值类型数组。<br><h3>int-int测试结果</h3><br>每个测试部分将以结果数据表开始，之后配有一幅图。表中的第一行是map大小，所有测试结果单位为毫秒。<br><br><a href="http://www.importnew.com/13687.html/int_int_table" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13698" title="int_int_table" src="http://incdn1.b0.upaiyun.com/2014/11/6c841a366ede0a29d0808b5153db2426.png" alt="" width="776" height="298"></a><br><br><a href="http://www.importnew.com/13687.html/intint1" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13689" title="intint1" src="http://incdn1.b0.upaiyun.com/2014/11/239bc5068954473708b0f034630eee6c.gif" alt="" width="988" height="413"></a><br><br>如你所见，这些函数库明显的分成了四组（从快至慢）：<br><br></div><br><ol><br>    <li>Koloboke结果最好：使用<code>long[]</code>类型来存储<strong>和</strong>一个不错的技巧，将一个随机自由的单元值复制给结果。Koloboke collections所有的3个版本都得到完全相同的结果（这并不意味着在其它测试中它们会一样得快）。</li><br>    <li>用GS collections的实现速度排名是第二：使用2个数组而不是3个在这里获得了不错的代码质量。</li><br>    <li>FastUtil 和 HPPC性能表现完全相同的（相差不到不到2%）。</li><br>    <li>测试中Trove的实现最慢：在大多数映射的情况下，大概比Koloboke慢两倍。在巨型映射（10M+）的情况下更慢。</li><br></ol><br><div><br><h3>int-Object</h3><br><table border="1"><br><tbody><br><tr><br><td>tests.maptests.prim_object.FastUtilIntObjectMapTest</td><br><td>int[] key, Object[] value, boolean[] used</td><br></tr><br><tr><br><td>tests.maptests.prim_object.GsIntObjectMapTest</td><br><td>int[] keys, Object[] values</td><br></tr><br><tr><br><td>tests.maptests.prim_object.HftcIntObjectMapTest</td><br><td>int[] keys, Object[] values</td><br></tr><br><tr><br><td>tests.maptests.prim_object.HppcIntObjectMapTest</td><br><td>int[] keys, Object[] values, boolean[] allocated</td><br></tr><br><tr><br><td>tests.maptests.prim_object.TroveIntObjectMapTest</td><br><td>int[] _set, Object[] _values, byte[] _states</td><br></tr><br></tbody><br></table><br>不出意外，FastUtil、HPPC 和 Trove使用了3个数组（包括一个单元状态的数组）。GS collections 和 Koloboke使用了2个数组，这个技巧类似于上面列出的特殊情况。<br><h4>int-Object测试结果</h4><br><a href="http://www.importnew.com/13687.html/int_object_table" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13699" title="int_object_table" src="http://incdn1.b0.upaiyun.com/2014/11/cea2c3535cbea69904a16ee93a5b502d.png" alt="" width="802" height="198"></a><br><br><a href="http://www.importnew.com/13687.html/intobject1" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13690" title="intobject1" src="http://incdn1.b0.upaiyun.com/2014/11/900fcdb5cd6035d5471d5c0f32f5544e.gif" alt="" width="1015" height="395"></a>本次测试结果分三组（从快至慢）：<br><ol><br>    <li>Koloboke只使用了2个数组所以是最快的，对于空的单元而言代码更简单。</li><br>    <li>FastUtil 和 HPPC紧随GS collections身后（它们没有尽力去发挥2个存储数组的优势而是使用了3个数组）。在不同的测试结果下它们略有不同，但彼此非常接近。</li><br>    <li>Trove又是最慢的那个，比Koloboke要慢1.5至2倍。</li><br></ol><br></div><br><div><br><h3>Object-int</h3><br><table border="1"><br><tbody><br><tr><br><td>tests.maptests.object_prim.FastUtilObjectIntMapTest</td><br><td>Object[] key, int[] value, boolean[] used</td><br></tr><br><tr><br><td>tests.maptests.object_prim.GsObjectIntMapTest</td><br><td>Object[] keys, int[] values</td><br></tr><br><tr><br><td>tests.maptests.object_prim.HftcObjectIntMapTest</td><br><td>Object[] keys, int[] values</td><br></tr><br><tr><br><td>tests.maptests.object_prim.HppcObjectIntMapTest</td><br><td>Object[] keys, int[] values, boolean[] allocated</td><br></tr><br><tr><br><td>tests.maptests.object_prim.TroveObjectIntMapTest</td><br><td>Object[] _set, int[] _values</td><br></tr><br></tbody><br></table><br>对于Object key，FastUtil和HPPC使用了第三个数组。这看上去并不是什么好主意。因为你可以允许使用一个私有的哨兵对象作为object key的一个标志。实际上它的性能略差。<br><br>GS collections、Koloboke 和 Trove使用的是2个数组，所以有理由期待它们会快一点。<br><h4>Object-int测试结果</h4><br><a href="http://www.importnew.com/13687.html/object_int_table" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13700" title="object_int_table" src="http://incdn1.b0.upaiyun.com/2014/11/72059385bb82e74b1d3a769abdd783bc.png" alt="" width="801" height="199"></a><br><br><a href="http://www.importnew.com/13687.html/objectint1" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13691" title="objectint1" src="http://incdn1.b0.upaiyun.com/2014/11/aed18adb66a0329762696eccad33b5e7.gif" alt="" width="1031" height="442"></a>这里分三组再次进行测试，但是不像之前那样特意区分（由快到慢）：<br><ol><br>    <li>Koloboke略快于GS collections，但是GS collections在10K和10M大小上的测试略胜一筹。</li><br>    <li>Trove和HPPC紧随其后。</li><br>    <li>FastUtil是本次测试最慢的那个——它比Koloboke慢2-2.5倍。有趣的是，虽然使用的都是<strong>底层数组=3</strong>的情况，但是HPPC的实现明显比FastUtil要快。</li><br></ol><br></div><br><div><br><h3>Object-Object</h3><br><table border="1"><br><tbody><br><tr><br><td>tests.maptests.object.FastUtilObjMapTest</td><br><td>Object[] keys, Object[] values, boolean[] used</td><br></tr><br><tr><br><td>tests.maptests.object.GsObjMapTest</td><br><td>Object[] table - interleaved keys and values</td><br></tr><br><tr><br><td>tests.maptests.object.HftcMutableObjTest</td><br><td>Object[] tab - interleaved keys and values</td><br></tr><br><tr><br><td>tests.maptests.object.HppcObjMapTest</td><br><td>Object[] keys, Object[] values, boolean[] allocated</td><br></tr><br><tr><br><td>tests.maptests.object.JdkMapTest</td><br><td>Node&lt;K,V&gt;[] table - each Node could be a part of a linked list or a TreeMap (Java 8)</td><br></tr><br><tr><br><td>tests.maptests.object.TroveObjMapTest</td><br><td>Object[] _set, Object[] _values</td><br></tr><br></tbody><br></table><br>在Object-Object的映射的结果情况有些复杂：<br><ul><br>    <li>FastUtil和HPPC在每个映射中使用了3个数组，这没啥新奇。</li><br>    <li>.JDK中<code>HashMap</code>是存储在<code>Node</code>对象中的唯一项，这将键值进行了结合。那意味着每一项你至少有24个字节的开销。而事实上则是32个字节的开销，因为每一个bucket中的<code>HashMap</code>是一个双向链表，所以每一项有两个额外的指针。</li><br>    <li>Trove使用2个映射（和一个针对空单元的特殊哨兵对象）。</li><br>    <li>最后，GS collections 和 Koloboke正在使用一个交叉存储的键值数组，这使它们成为了这6个Collection中CPU缓存利用得最好的一个。</li><br></ul><br></div><br><div><br><br>现在，对这些map的实现了解之后。让我们开始测试这些map的性能。<br><h4>Object-Object测试结果</h4><br><a href="http://www.importnew.com/13687.html/object_object_table" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13701" title="object_object_table" src="http://incdn1.b0.upaiyun.com/2014/11/66757bf3e43f03731e3a4bda4542b495.png" alt="" width="731" height="231"></a><br><br><a href="http://www.importnew.com/13687.html/objectobject1" rel="external" target="_blank"><img class="aligncenter size-full wp-image-13692" title="objectobject1" src="http://incdn1.b0.upaiyun.com/2014/11/c49bbc8a42285f1bed3f4cdb73dbad6f.gif" alt="" width="1004" height="385"></a>Object-Object测试结果更为复杂。<br><ol><br>    <li>通常情况下，Koloboke比JDK<code>HashMap</code>更快。但除了超大型map，其他情况即使Koloboke胜出，速度优势也不是那么明显。</li><br>    <li>对于大型和超大map，GS Collections已经非常接近Koloboke 和 JDKmaps的性能，但对于小型map测试结果相去甚远了。</li><br>    <li>最后，FastUtil、HPPC和Trove对于各种大小的map下性能几乎相同。</li><br></ol><br><h2>10亿项测试</h2><br>我将创建一个大小为<strong>10亿</strong>项（entry 键值对），然后看看这些集合会发生什么。测试中设置因子为0.5，这意味着所有这些映射必须分配一个非常大的数组，允许的最大长度接近2<sup>31</sup>。<br><br>FastUtil、HPPC和GS collections因为各种异常失败了(并不是因为OOM——我为这次测试分配了110G的内存)。<br><br>Koloboke、Trove和JDK设法通过了这些测试。不幸的是，这些测试在JMH上却没有成功运行。他们运行了另外一套代码。<br><br>以上就是测试的结果（如果需要和之前的结果进行比较，需要把之前的结果乘以10。因为所有之前的结果总共调用了100M次<code>map.get</code>）：<br><pre class="brush: shell; gutter: true">tests.maptests.primitive.HftcMutableMapTest : time = 95.05 sec<br>tests.maptests.primitive.TroveMapTest : time = 235.062 sec<br><br>tests.maptests.prim_object.HftcIntObjectMapTest : time = 216.361 sec<br>tests.maptests.prim_object.TroveIntObjectMapTest : time = 304.019 sec<br><br>tests.maptests.object_prim.HftcObjectIntMapTest : time = 335.139 sec<br>tests.maptests.object_prim.TroveObjectIntMapTest : time = 217.412 sec<br><br>tests.maptests.object.HftcMutableObjTest : time = 272.792 sec<br>tests.maptests.object.JdkMapTest : time = 163.335 sec<br>tests.maptests.object.TroveObjMapTest : time = 239.133 sec</pre><br>如你所见，Koloboke在primitive-primitive的转化上赢得了很大的优势。在primitive-to-object的转换测试方面也明显快了不少。<br><br>在object-primitive转换测试中，Koloboke就明显比Trove用时要久。<br><br>最后，对于object-object的转换测试，我必须改变Koloboke map的初始化代码，因为一旦我添加5亿个元素性能就开始迅速下降：<br><pre class="brush: java; gutter: true">HashObjObjMaps.getDefaultFactory().withHashConfig(HashConfig.fromLoads(0.5, 0.6, 0.8)).newMutableMap(keys.length)</pre><br><h2>Koloboke 2.0？</h2><br><a href="https://github.com/OpenHFT/Koloboke/wiki/Koloboke:-roll-the-collection-implementation-with-features-you-need" rel="nofollow" target="_blank">Roma Leventov刚刚宣布</a>他正在考虑建一个更新更快的<a href="https://github.com/OpenHFT/Koloboke" rel="nofollow" target="_blank">Koloboke库</a>，但是这需要你的反馈。你能帮他给出一点建议吗？<br><h2>总结</h2><br><ul><br>    <li><a href="https://github.com/OpenHFT/Koloboke" rel="nofollow" target="_blank">Koloboke</a>已经被证明是hash map实现最快也是存储最高效的库，但是它还刚刚诞生并没有被广泛使用，难道你不想试试？</li><br>    <li>如果你正在寻找更加稳定和成熟的库（或者愿意牺牲部分性能），你或许应该看看<a href="https://github.com/goldmansachs/gs-collections" rel="nofollow" target="_blank">GS collections library</a>。与Koloboke不同，GS Collection给了你一个更加宽泛的开箱即用的集合。</li><br></ul><br><h2>源代码</h2><br><a href="http://d1k2jhzcfaebet.cloudfront.net/wp-content/uploads/2014/11/maptest.zip" target="_blank">文章源代码</a><br><br></div>
+
+
+<p> 原文链接： <a target="_blank" href="http://java-performance.info/large-hashmap-overview-jdk-fastutil-goldman-sachs-hppc-koloboke-trove/" class="external" rel="nofollow">java-performance</a>    翻译： <a href="http://www.importnew.com" target="_blank" rel="external"> ImportNew.com </a> - <a href="http://www.importnew.com/author/gray" target="_blank" rel="external">郭楚沅</a><br>译文链接： <a href="http://www.importnew.com/13687.html" target="_blank" rel="external">http://www.importnew.com/13687.html</a><br>[ <span style="color:#ff0000"><b>转载请保留原文出处、译者和译文链接。</b></span>]<br><br></p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HashMap/"> #HashMap </a>
+          
+            <a href="/tags/JDK/"> #JDK </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/03/17/无IDE时编译和运行Java/">无IDE时编译和运行Java</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/"
+               data-title="大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove" data-url="http://www.gcrimson.com/2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="http://ww3.sinaimg.cn/small/9eaa5fcdjw8er7mm0e8xmj20rd18gk8m.jpg" alt="Crimson" />
+          <p class="site-author-name">Crimson</p>
+        </div>
+        <p class="site-description motion-element">郭楚沅的BLOG</p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/2661965773" target="_blank">Weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://blog.whkgo.com" target="_blank">Blogroll</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">评估对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.1.</span> <span class="nav-text">JDK 8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.2.</span> <span class="nav-text">FastUtil 6.5.15</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">Goldman Sachs Collections 5.1.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.4.</span> <span class="nav-text">HPPC 0.6.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.5.</span> <span class="nav-text">Koloboke 0.6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.6.</span> <span class="nav-text">Trove 3.0.3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">数据存储的实现和测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.1.</span> <span class="nav-text">int-int</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.2.</span> <span class="nav-text">处理GS Collections和Koloboke中空单元和被删除的单元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.3.</span> <span class="nav-text">int-int测试结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.</span> <span class="nav-text">int-Object</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.4.1.</span> <span class="nav-text">int-Object测试结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.5.</span> <span class="nav-text">Object-int</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.5.1.</span> <span class="nav-text">Object-int测试结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.6.</span> <span class="nav-text">Object-Object</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.6.1.</span> <span class="nav-text">Object-Object测试结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">10亿项测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Koloboke 2.0？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">源代码</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">Crimson</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+  <script src="//code.jquery.com/jquery-1.7.2.min.js"></script>
+  
+  <script src="//dn-lbstatics.qbox.me/lbservice/busuanzi/1.0/busuanzi.mini.js"/></script>
+
+  <span id="container_site_counter">
+    本站总访问量<span id="value_site_counter"></span>次
+  </span>
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.content img').each(function () {
+        var $image = $(this);
+        var $imageWrapLink = $image.parent('a');
+
+        if ($imageWrapLink.size() < 1) {
+          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
+        }
+        $imageWrapLink.addClass('fancybox');
+      });
+    });
+    $('.fancybox').fancybox({
+      helpers: {
+        overlay: {
+          locked: false
+        }
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"crimsonguo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+  
+</body>
+</html>
