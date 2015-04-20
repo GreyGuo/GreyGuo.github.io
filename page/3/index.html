@@ -41,11 +41,13 @@
   </script>
 
 
-  <title> 分类: 资讯 // 郭楚沅的BLOG </title>
+  <title> 郭楚沅的BLOG </title>
 </head>
 
 <body>
-  <div class="container one-column ">
+  <div class="container one-column 
+   page-home 
+">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -267,33 +269,93 @@
       <div class="main-inner">
         <div id="content" class="content">
           
-
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        资讯
-        <small>分类</small>
-      </h2>
-    </div>
-
+  <div id="posts" class="posts-expand">
     
       
 
-  <div class="post post-type-normal">
+  <div class="post post-type-normal ">
     <div class="post-header">
 
-      <div class="post-title">
-        
-            <a class="post-title-link" href="/2015/04/10/Your Path to a $16B exit Build a J2ME App/">
-              160亿美元的收购，你怎么看？ 从开发一个J2ME应用说起
-            </a>
-        
-      </div>
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/">
+                大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove
+              </a>
+            
+          
+        </h1>
+      
 
       <div class="post-meta">
-        <span class="post-time"> 04-10 </span>
-      </div>
+        <span class="post-time">
+          发表于 2014-02-17
+        </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/JAVA/">JAVA</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>这篇文章对常见HashMap实现进行了性能评估。以JDK HashMap为基线，涵盖了5个知名的函数。用原始类型、对象分别作为key和Value组合进行测试，并给出测试报告。</p>
+<div><br><h2>介绍</h2><br>这篇文章将会介绍以JDK中<code>HashMap</code>作为标准的五种知名库的hash map实现，并逐一测试：<br><ul><br>    <li>原始数据类型到原始数据类型的映射</li><br>    <li>原始数据类型到对象的映射</li><br>    <li>对象到原始数据类型的映射</li><br>    <li>对象到对象的映射（JDK仅在这部分出现）</li><br></ul><br>这篇文章将会综述一个测试——使用一组随机key进行map读取访问（给定大小的待测试Collection共用同一组key）。<br><br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/02/17/大型HashMap评估：JDK、FastUtil、Goldman Sachs、HPPC、Koloboke与Trove/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HashMap/"> #HashMap </a>
+          
+            <a href="/tags/JDK/"> #JDK </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
     </div>
   </div>
 
@@ -302,6 +364,9 @@
   </div>
 
   
+  <div class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo;</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </div>
 
 
         </div>
@@ -423,12 +488,6 @@
 
   
   
-  
-    <script type="text/javascript">
-      postMotionOptions = {stagger: 100, drag: true};
-    </script>
-  
-
 
   
   <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
@@ -618,6 +677,26 @@
   
 
   
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"crimsonguo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
 
   
 </body>

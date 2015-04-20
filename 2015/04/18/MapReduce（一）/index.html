@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="人生,诗词," />
+  <meta name="keywords" content="MapReduce,设计模式,过滤," />
 
 
 
@@ -41,7 +41,7 @@
   </script>
 
 
-  <title> 诗词二首【原创】 // 郭楚沅的BLOG </title>
+  <title> 过滤模式 // 郭楚沅的BLOG </title>
 </head>
 
 <body>
@@ -280,7 +280,7 @@
           
           
             
-              诗词二首【原创】
+              过滤模式
             
           
         </h1>
@@ -288,14 +288,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-04-16
+          发表于 2015-04-18
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/原创/">原创</a>
+              <a href="/categories/MapReduce/">MapReduce</a>
 
               
               
@@ -308,8 +308,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/04/16/诗词/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/16/诗词/"></span>
+            <a href="/2015/04/18/MapReduce（一）/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/18/MapReduce（一）/"></span>
             </a>
           </span>
           
@@ -323,7 +323,36 @@
       
 
       
-        <body align="center"><br>  <div width="980" align="center"><br><br><h1>《遣》</h1><br><br><div>湘粤自此无多路，青杏残落往忆昔。</div><br><div>昨夕君言今朝事，夜来卷帘忽起行。</div><br><br><a id="more"></a><br><br><br><h1>《芙蓉城丶天地窄》</h1><br><div>云暮添，青城远眺。蜀地花，幸春破晓。 </div><br><div>莫守昼夕待老，是昔云歌。惊坠觉，几近恍惚平生。 </div><br><div>一酒一歌一阕，悲欢离合。且莫停，往尽伊始。 </div><br><br><br><br><br>原创作品，转载请注明，感谢合作：）<br><br></div></body>
+        <p>过滤在实际中使用非常广泛，简单来说，这里的过滤设计模式主要指的是过滤，过滤通过简单的判定条件筛选出每一条记录，从而对最后的结果进行取舍。</p>
+<a id="more"></a>
+<p>过滤设计模式的目的在于对海量数据进行筛选，相比较于原数据，过滤后的数据相似度较高，同时数据量也会更小。打个比方，你准备去图书馆借计算机网络方面的书，那么相比较整个图书馆的书计算机网络的种类中你感兴趣的一本或者几本图书就是“过滤”后的结果集。</p>
+<p><strong>结构</strong></p>
+<pre class="brush: java; gutter: true">
+map(key, record)
+  if we want to keep record then
+  emit key,value
+</pre>
+
+<p>非常有意思的是，在过滤中是不需要Reduce函数的，其每一条记录相互独立同时也不需要保留。</p>
+<p>下面举一个简单的例子。</p>
+<p>我们想在一个较大的数据集中获得一个子集，从而对其代表性数据进行分析。我们设计一个删选机制，如果低于某一个阈值则丢弃该记录，对留下的记录进行记录，这里需要注意的是整个程序是没有输入的。其伪代码如下：</p>
+<pre class="brush: java; gutter: true">
+Random rands = new Random();
+Double per;
+void setup(Context context) {
+strPer = context.getConfiguration().get("filter_per");
+per = Double.parseDouble(strPer) / 100.0;
+}
+
+void map(key,value,context){
+if(rands.nextDouble() < percentage){
+context.write(NullWritable.get(),value);
+}
+}
+</pre>
+
+<p>如果选择过滤比例较小，可以增加一个步骤完成对输出文件的整合。</p>
+
       
     </div>
 
@@ -331,9 +360,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/人生/"> #人生 </a>
+            <a href="/tags/MapReduce/"> #MapReduce </a>
           
-            <a href="/tags/诗词/"> #诗词 </a>
+            <a href="/tags/设计模式/"> #设计模式 </a>
+          
+            <a href="/tags/过滤/"> #过滤 </a>
           
         </div>
       
@@ -342,13 +373,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/04/17/网易游戏系列/">网易游戏实习【简版】</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/04/13/Algorithm of the Week Shortest Path in a Directed Acyclic Graph/">本周算法：有向无环图的最短路径</a>
+              <a href="/2015/04/17/网易游戏系列/">网易游戏实习【简版】</a>
             
           </div>
         </div>
@@ -364,8 +393,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/04/16/诗词/"
-               data-title="诗词二首【原创】" data-url="http://www.gcrimson.com/2015/04/16/诗词/">
+          <div class="ds-thread" data-thread-key="2015/04/18/MapReduce（一）/"
+               data-title="过滤模式" data-url="http://www.gcrimson.com/2015/04/18/MapReduce（一）/">
           </div>
         
       </div>
@@ -409,21 +438,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">23</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -457,7 +486,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">《遣》</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">《芙蓉城丶天地窄》</span></a></li></ol></div>
+              <p class="post-toc-empty">此文章未包含目录</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
