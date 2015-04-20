@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="郭楚沅的BLOG,郭楚沅,郭楚沅的博客" />
+  <meta name="keywords" content="Javascript,闭包," />
 
 
 
@@ -41,11 +41,11 @@
   </script>
 
 
-  <title> 归档 // 郭楚沅的BLOG </title>
+  <title> Javascript闭包 // 郭楚沅的BLOG </title>
 </head>
 
 <body>
-  <div class="container one-column  page-archive ">
+  <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -268,58 +268,138 @@
         <div id="content" class="content">
           
 
-  <div id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-       
-      
-      嗯..! 目前共计 11 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
 
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2014">2014</h2>
-        </div>
-      
-      
-
-      
-
-  <div class="post post-type-normal">
+  <div class="post post-type-normal ">
     <div class="post-header">
 
-      <div class="post-title">
-        
-            <a class="post-title-link" href="/2014/04/19/JavaScript闭包/">
-              javascript闭包
-            </a>
-        
-      </div>
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Javascript闭包
+            
+          
+        </h1>
+      
 
       <div class="post-meta">
-        <span class="post-time"> 04-19 </span>
-      </div>
+        <span class="post-time">
+          发表于 2015-04-19
+        </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/JS/">JS</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/04/19/JavaScript闭包/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/19/JavaScript闭包/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>昨天去腾讯溜了一圈，出了道有道闭包的题目，这里稍微写一下。</p>
+<a id="more"></a>
+<p>Javascript的函数内部可以直接读取全局变量。</p>
+<pre class="brush: java; gutter: true">
+　var n = 1;
+　　function f(){
+　　　　alert(n);
+　　}
+　　f();
+</pre>
+
+<p><strong>闭包</strong></p>
+<p>“闭包”（closure）的概念起源于离散数学。在Javascript中“官方”的解释是：所谓“闭包”，指的是一个拥有许多变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。</p>
+<p><strong>闭包的特点</strong></p>
+<ul>
+<li>作为一个函数变量的一个引用，当函数返回时，其处于激活状态。</li>
+<li>一个闭包就是当一个函数返回时没有释放资源的栈区。javascript允许使用内部函数位于另一个函数的函数体内。而且，这些内部函数可以访问它们所在的外部函数中声明的所有局部变量、参数和声明其的内部函数。当其中一个这样的内部函数在包含它们的外部函数之外被调用时，就会形成闭包。</li>
+</ul>
+<pre class="brush: java; gutter: true">
+function closure(){
+var str = "I'm Cri.";
+return function(){
+alert(str);
+}
+}
+var Obj = closure();
+Obj();
+</pre>
+
+<p>在上面代码中，str是局部变量，若str在closure函数调用完成以后不能再被访问，则在函数执行完成后str将被释放。但是由于函数closure返回了一个内部函数，且这个返回的函数引用了str变量，导致了str可能会在closure函数执行完成以后还会被引用，所以str所占用的资源不会被回收。这样closure就形成了一个闭包。</p>
+<p>JavaScript的闭包非常重要，只有深入理解其意义才能使得程序更加安全：）</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Javascript/"> #Javascript </a>
+          
+            <a href="/tags/闭包/"> #闭包 </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/18/MapReduce（一）/">过滤模式</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
     </div>
   </div>
 
 
 
     
-
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/04/19/JavaScript闭包/"
+               data-title="Javascript闭包" data-url="http://www.gcrimson.com/2015/04/19/JavaScript闭包/">
+          </div>
+        
+      </div>
+    
   </div>
-
-  
 
 
         </div>
@@ -338,6 +418,15 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-inner">
 
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
       
 
       <div class="site-overview">
@@ -392,6 +481,17 @@
       </div>
 
       
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
 
     </div>
   </div>
@@ -441,12 +541,6 @@
 
   
   
-  
-    <script type="text/javascript">
-      postMotionOptions = {stagger: 100, drag: true};
-    </script>
-  
-
 
   
   <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
@@ -633,15 +727,351 @@
 
   
   
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
 
 
   
 
   
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"crimsonguo"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
 
   
 </body>
